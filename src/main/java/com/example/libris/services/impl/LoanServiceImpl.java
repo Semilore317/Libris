@@ -11,6 +11,7 @@ import com.example.libris.repository.BookInstanceRepository;
 import com.example.libris.repository.LoanRepository;
 import com.example.libris.repository.MemberRepository;
 import com.example.libris.services.LoanService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class LoanServiceImpl implements LoanService {
 
