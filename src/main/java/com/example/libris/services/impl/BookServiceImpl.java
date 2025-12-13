@@ -1,17 +1,23 @@
 package com.example.libris.services.impl;
 
+import com.example.libris.dto.AddBookInstanceRequestDTO;
+import com.example.libris.dto.BookRequestDTO;
 import com.example.libris.dto.BookResponseDTO;
 import com.example.libris.entity.Book;
+import com.example.libris.entity.BookInstance;
 import com.example.libris.enums.BookEnum;
 import com.example.libris.exception.ResourceNotFoundException;
 import com.example.libris.repository.BookRepository;
 import com.example.libris.repository.BookInstanceRepository;
 import com.example.libris.services.BookService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -41,6 +47,34 @@ public class BookServiceImpl implements BookService {
         return bookRepository.searchBooks(query).stream()
                 .map(this::convertToBookResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Book createBook(BookRequestDTO bookRequestDTO) {
+        Book book = Book.builder()
+                .ISBN(bookRequestDTO.getISBN())
+                .title(bookRequestDTO.getTitle())
+                .author(bookRequestDTO.getAuthor())
+                .publicationYear(bookRequestDTO.getPublicationYear())
+                .build();
+        return bookRepository.save(book);
+    }
+
+    @Override
+    @Transactional
+    public List<BookInstance> addInstancesToBook(AddBookInstanceRequestDTO requestDTO) {
+        Book book = bookRepository.findById(requestDTO.getBookId())
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + requestDTO.getBookId()));
+
+        List<BookInstance> instances = new ArrayList<>();
+        for (int i = 0; i < requestDTO.getQuantity(); i++) {
+            BookInstance instance = new BookInstance();
+            instance.setBook(book);
+            instance.setStatus(BookEnum.AVAILABLE);
+            instances.add(instance);
+        }
+
+        return bookInstanceRepository.saveAll(instances);
     }
 
     private BookResponseDTO convertToBookResponseDTO(Book book) {

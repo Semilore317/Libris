@@ -1,5 +1,7 @@
 package com.example.libris.services;
 
+import com.example.libris.dto.AddBookInstanceRequestDTO;
+import com.example.libris.dto.BookRequestDTO;
 import com.example.libris.dto.BookResponseDTO;
 import com.example.libris.entity.Book;
 import com.example.libris.entity.BookInstance;
@@ -16,6 +18,7 @@ public interface BookService {
     // search books by title, author, or ISBN, showing availability
     List<BookResponseDTO> searchBooks(String query);
 
-    // CRUD operations for the Book entity (the title/idea)
-    // still need basic creation/update methods for the Book entity itself
+    Book createBook(BookRequestDTO bookRequestDTO);
+
+    List<BookInstance> addInstancesToBook(AddBookInstanceRequestDTO requestDTO);
 }

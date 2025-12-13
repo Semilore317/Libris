@@ -21,4 +21,5 @@ public interface LoanService {
 
     // 5. Find Overdue Loans (For your "nice to have" fee calculation)
     List<Loan> findOverdueLoans();
+    // Method to add physical copies to an existing book title
 }
