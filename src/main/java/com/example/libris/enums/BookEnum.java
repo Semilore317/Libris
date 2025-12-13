@@ -1,4 +1,4 @@
-package com.example.libris.Enum;
+package com.example.libris.enums;
 
 public enum BookEnum {
     AVAILABLE,

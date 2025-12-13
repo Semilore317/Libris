@@ -1,6 +1,6 @@
-package com.example.libris.Entity;
+package com.example.libris.entity;
 
-import com.example.libris.Enum.BookEnum;
+import com.example.libris.enums.BookEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
