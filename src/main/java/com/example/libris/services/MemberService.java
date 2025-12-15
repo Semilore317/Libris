@@ -11,4 +11,7 @@ public interface MemberService {
     MemberResponseDTO getMemberById(Long id);
     MemberResponseDTO updateMember(Long id, MemberRequestDTO memberRequestDTO);
     void deleteMember(Long id);
+
+    // Look up a member using the unique identifier found on their physical card.
+    MemberResponseDTO getMemberByMembershipNumber(String membershipNumber);
 }

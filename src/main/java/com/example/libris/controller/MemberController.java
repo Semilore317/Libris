@@ -43,6 +43,12 @@ MemberController {
         return ResponseEntity.ok(updatedMember);
     }
 
+    @GetMapping("/lookup")
+    public ResponseEntity<MemberResponseDTO> getMemberByMembershipNumber(@RequestParam String membershipNumber) {
+        MemberResponseDTO member = memberService.getMemberByMembershipNumber(membershipNumber);
+        return ResponseEntity.ok(member);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
         memberService.deleteMember(id);

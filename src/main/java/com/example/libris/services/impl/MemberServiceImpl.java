@@ -63,5 +63,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found with id: " + id));
         memberRepository.delete(member);
+    @Override
+    public MemberResponseDTO getMemberByMembershipNumber(String membershipNumber) {
+        Member member = memberRepository.findByMembershipNumber(membershipNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found with membership number: " + membershipNumber));
+        return memberMapper.memberToMemberResponseDTO(member);
     }
 }
