@@ -55,6 +55,7 @@ public class BookServiceImpl implements BookService {
                 .ISBN(bookRequestDTO.getISBN())
                 .title(bookRequestDTO.getTitle())
                 .author(bookRequestDTO.getAuthor())
+                .genre(bookRequestDTO.getGenre())
                 .publicationYear(bookRequestDTO.getPublicationYear())
                 .build();
         return bookRepository.save(book);
@@ -86,6 +87,7 @@ public class BookServiceImpl implements BookService {
         dto.setISBN(book.getISBN());
         dto.setTitle(book.getTitle());
         dto.setAuthor(book.getAuthor());
+        dto.setGenre(book.getGenre());
         dto.setPublicationYear(book.getPublicationYear());
         dto.setTotalCopies(totalCopies);
         dto.setAvailableCopies(availableCopies);

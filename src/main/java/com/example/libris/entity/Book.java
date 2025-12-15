@@ -1,6 +1,7 @@
 package com.example.libris.entity;
 
 
+import com.example.libris.enums.BookGenre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,5 +27,8 @@ public class Book {
     private String ISBN;
     private String title;
     private String author;
+
+    @Enumerated(EnumType.STRING)
+    private BookGenre genre;
     private Year publicationYear;
 }

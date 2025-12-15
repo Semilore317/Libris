@@ -1,5 +1,6 @@
 package com.example.libris.dto;
 
+import com.example.libris.enums.BookGenre;
 import lombok.Data;
 import java.time.Year;
 
@@ -9,6 +10,7 @@ public class BookResponseDTO {
     private String ISBN;
     private String title;
     private String author;
+    private BookGenre genre;
     private Year publicationYear;
 
     private Long totalCopies;

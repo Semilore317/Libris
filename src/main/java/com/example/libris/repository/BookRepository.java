@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT b FROM Book b WHERE b.title LIKE %:query% OR b.author LIKE %:query% OR b.ISBN LIKE %:query%")
+
+    @Query("SELECT b FROM Book b WHERE b.title LIKE %:query% OR b.author LIKE %:query% OR b.ISBN LIKE %:query% OR CAST(b.genre AS string) LIKE %:query%")
     List<Book> searchBooks(@Param("query") String query);
 }
