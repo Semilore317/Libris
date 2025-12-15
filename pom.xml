@@ -88,6 +88,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version> <!-- Use a recent version -->
+                <configuration>
+                    <systemPropertyVariables>
+                        <DB_URL>${env.DB_URL}</DB_URL>
+                        <DB_USERNAME>${env.DB_USERNAME}</DB_USERNAME>
+                        <DB_PASSWORD>${env.DB_PASSWORD}</DB_PASSWORD>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
