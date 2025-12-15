@@ -35,7 +35,7 @@ public class LoanServiceImpl implements LoanService {
     private MemberRepository memberRepository;
 
     @Override
-    public Loan checkoutBook(Long bookInstanceId, Long memberId) {
+    public Loan checkoutBook(Long bookInstanceId, Long memberId, java.time.LocalDate dueDate) {
         BookInstance bookInstance = bookInstanceRepository.findById(bookInstanceId)
                 .orElseThrow(() -> new ResourceNotFoundException("BookInstance not found with id: " + bookInstanceId));
 
@@ -54,7 +54,7 @@ public class LoanServiceImpl implements LoanService {
                 .bookInstance(bookInstance)
                 .member(member)
                 .borrowedAt(LocalDateTime.now())
-                .dueDate(LocalDateTime.now().plusWeeks(2)) // 2 weeks loan period
+                .dueDate(dueDate.atStartOfDay())
                 .build();
 
         bookInstance.setStatus(BookEnum.ON_LOAN);
