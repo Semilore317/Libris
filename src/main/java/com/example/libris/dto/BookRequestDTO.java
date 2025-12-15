@@ -7,6 +7,7 @@ import java.time.Year;
 
 @Data
 public class BookRequestDTO {
+    @com.fasterxml.jackson.annotation.JsonProperty("ISBN")
     private String ISBN;
     private String title;
     private String author;

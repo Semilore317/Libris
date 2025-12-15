@@ -18,7 +18,7 @@ public interface BookService {
     // search books by title, author, or ISBN, showing availability
     List<BookResponseDTO> searchBooks(String query);
 
-    Book createBook(BookRequestDTO bookRequestDTO);
+    BookResponseDTO createBook(BookRequestDTO bookRequestDTO);
 
     List<BookInstance> addInstancesToBook(AddBookInstanceRequestDTO requestDTO);
 }

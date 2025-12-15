@@ -35,8 +35,9 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody BookRequestDTO bookRequestDTO) {
-        return ResponseEntity.ok(bookService.createBook(bookRequestDTO));
+    public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookRequestDTO bookRequestDTO) {
+        BookResponseDTO book = bookService.createBook(bookRequestDTO);
+        return new ResponseEntity<>(book, org.springframework.http.HttpStatus.CREATED);
     }
 
     @PostMapping("/instances")
