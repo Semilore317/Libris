@@ -36,6 +36,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<MemberResponseDTO> updateMember(@PathVariable Long id, @Valid @RequestBody MemberRequestDTO memberRequestDTO) {
         MemberResponseDTO updatedMember = memberService.updateMember(id, memberRequestDTO);
