@@ -1,6 +1,7 @@
 package com.example.libris.repository;
 
 import com.example.libris.entity.Loan;
+import com.example.libris.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     Optional<Loan> findByBookInstanceIdAndReturnedAtIsNull(Long bookInstanceId);
 
     List<Loan> findByDueDateBeforeAndReturnedAtIsNull(LocalDateTime now);
+
+    List<Loan> findByMember(Member member);
 }

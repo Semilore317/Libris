@@ -8,7 +8,7 @@ import java.util.List;
 public interface LoanService {
 
     // 1. Checkout Method (Must return the created Loan object)
-    Loan checkoutBook(Long bookInstanceId, Long memberId, java.time.LocalDate dueDate);
+    Loan checkoutBook(Long bookInstanceId, String username, java.time.LocalDate dueDate);
 
     // 2. Return Method (Must handle the date of return and update statuses)
     Loan returnBook(Long loanId);
@@ -18,6 +18,8 @@ public interface LoanService {
 
     // 4. Find Active Loans for an Instance (Prevent double-checkout)
     Loan findActiveLoanByInstance(Long bookInstanceId);
+
+    List<Loan> findMyLoans(String username);
 
     // 5. Find Overdue Loans (For your "nice to have" fee calculation)
     List<Loan> findOverdueLoans();

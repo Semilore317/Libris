@@ -3,6 +3,7 @@ package com.example.libris.services.impl;
 import com.example.libris.entity.BookInstance;
 import com.example.libris.entity.Loan;
 import com.example.libris.entity.Member;
+import com.example.libris.entity.User;
 import com.example.libris.enums.BookEnum;
 import com.example.libris.exception.BookUnavailableException;
 import com.example.libris.exception.LoanLimitExceededException;
@@ -10,6 +11,7 @@ import com.example.libris.exception.ResourceNotFoundException;
 import com.example.libris.repository.BookInstanceRepository;
 import com.example.libris.repository.LoanRepository;
 import com.example.libris.repository.MemberRepository;
+import com.example.libris.repository.UserRepository;
 import com.example.libris.services.LoanService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,11 @@ public class LoanServiceImpl implements LoanService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public Loan checkoutBook(Long bookInstanceId, Long memberId, java.time.LocalDate dueDate) {
+    public Loan checkoutBook(Long bookInstanceId, String username, java.time.LocalDate dueDate) {
         BookInstance bookInstance = bookInstanceRepository.findById(bookInstanceId)
                 .orElseThrow(() -> new ResourceNotFoundException("BookInstance not found with id: " + bookInstanceId));
 
@@ -43,10 +48,13 @@ public class LoanServiceImpl implements LoanService {
             throw new BookUnavailableException("Book is not available for loan");
         }
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new ResourceNotFoundException("Member not found with id: " + memberId));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 
-        if (findActiveLoansByMember(memberId).size() >= MAX_ACTIVE_LOANS) {
+        Member member = memberRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found for user: " + username));
+
+        if (findActiveLoansByMember(member.getId()).size() >= MAX_ACTIVE_LOANS) {
             throw new LoanLimitExceededException("Member has reached the maximum loan limit of " + MAX_ACTIVE_LOANS);
         }
 
@@ -66,7 +74,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public Loan returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new ResourceNotFoundException("Loan not found with id: " + loanId));
+                .orElseThrow(() -> new ResourceNotFound.class, "Loan not found with id: " + loanId));
 
         loan.setReturnedAt(LocalDateTime.now());
         BookInstance bookInstance = loan.getBookInstance();
@@ -90,5 +98,16 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public List<Loan> findOverdueLoans() {
         return loanRepository.findByDueDateBeforeAndReturnedAtIsNull(LocalDateTime.now());
+    }
+
+    @Override
+    public List<Loan> findMyLoans(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+
+        Member member = memberRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found for user: " + username));
+
+        return loanRepository.findByMember(member);
     }
 }
