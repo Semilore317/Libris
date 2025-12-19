@@ -9,7 +9,7 @@
       "name": "Auth",
       "item": [
         {
-          "name": "Login",
+          "name": "Login (Librarian)",
           "request": {
             "method": "POST",
             "header": [
@@ -20,7 +20,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"librarian\",\n  \"password\": \"password\"\n}"
+              "raw": "{\n  \"username\": \"sarah.connor\",\n  \"password\": \"password\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/auth/login",
@@ -34,41 +34,35 @@
               ]
             }
           },
-          "response": [
-            {
-              "name": "Successful Login",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"username\": \"librarian\",\n  \"password\": \"password\"\n}"
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/api/auth/login",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "api",
-                    "auth",
-                    "login"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
+          "response": []
+        },
+        {
+          "name": "Login (Member)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"frodo.baggins\",\n  \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
               ],
-              "cookie": [],
-              "body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaWJyYXJpYW4iLCJpYXQiOjE2Nzk2NjU4MjIsImV4cCI6MTY3OTY2OTQyMn0.grGzFv2oE_...\",\n    \"roles\": [\n        \"ROLE_LIBRARIAN\"\n    ]\n}"
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
-          ]
+          },
+          "response": []
         }
       ]
     },
@@ -120,7 +114,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/books/search?query=dune",
+              "raw": "{{baseUrl}}/api/v1/books/search?query=Tolkien",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -132,8 +126,8 @@
               ],
               "query": [
                 {
-                    "key": "query",
-                    "value": "dune"
+                  "key": "query",
+                  "value": "Tolkien"
                 }
               ]
             }
@@ -162,7 +156,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"The Hitchhiker's Guide to the Galaxy\",\n  \"author\": \"Douglas Adams\",\n  \"isbn\": \"978-0345391803\",\n  \"publishedDate\": \"1979-10-12\",\n  \"genre\": \"SCIENCE_FICTION\"\n}"
+              "raw": "{\n  \"title\": \"The Hitchhiker's Guide to the Galaxy\",\n  \"author\": \"Douglas Adams\",\n  \"ISBN\": \"978-0345391803\",\n  \"publicationYear\": 1979,\n  \"genre\": \"SCIENCE_FICTION\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/books",
@@ -200,7 +194,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bookId\": 1,\n  \"numberOfInstances\": 5\n}"
+              "raw": "{\n  \"bookId\": 1,\n  \"quantity\": 5\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/books/instances",
@@ -223,7 +217,7 @@
       "name": "Loans",
       "item": [
         {
-          "name": "Checkout Book",
+          "name": "Checkout Book (Librarian for Member)",
           "request": {
             "auth": {
               "type": "bearer",
@@ -244,7 +238,46 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bookInstanceId\": 1,\n  \"dueDate\": \"2025-12-31T23:59:59\"\n}"
+              "raw": "{\n  \"bookInstanceId\": 3,\n  \"memberId\": 3,\n  \"dueDate\": \"2025-12-31\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loans/checkout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "loans",
+                "checkout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout Book (Self-Service)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookInstanceId\": 4,\n  \"dueDate\": \"2025-12-31\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/loans/checkout",
@@ -318,7 +351,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"newmember\",\n    \"password\": \"password123\",\n    \"fullName\": \"New Member Name\",\n    \"email\": \"newmember@example.com\"\n}"
+              "raw": "{\n    \"username\": \"peter.parker\",\n    \"password\": \"password\",\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Parker\",\n    \"email\": \"peter.parker@dailybugle.com\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/members",
@@ -384,7 +417,7 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/reservations?bookId=1",
+              "raw": "{{baseUrl}}/api/v1/reservations?bookId=3",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -395,8 +428,8 @@
               ],
               "query": [
                 {
-                    "key": "bookId",
-                    "value": "1"
+                  "key": "bookId",
+                  "value": "3"
                 }
               ]
             }

@@ -25,7 +25,7 @@ public class AuthControllerTest {
     @Test
     public void testLoginSuccess() throws Exception {
         LoginRequestDto loginRequest = new LoginRequestDto();
-        loginRequest.setUsername("librarian");
+        loginRequest.setUsername("sarah.connor");
         loginRequest.setPassword("password");
 
         mockMvc.perform(post("/api/auth/login")

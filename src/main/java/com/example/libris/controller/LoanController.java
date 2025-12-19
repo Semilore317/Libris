@@ -32,10 +32,29 @@ public class LoanController {
     @PostMapping("/checkout")
     public ResponseEntity<Loan> checkoutBook(@Valid @RequestBody LoanRequestDTO loanRequestDTO, Principal principal) {
         User user = userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + principal.getName()));
-        Member member = memberRepository.findByUser(user)
-                .orElseThrow(() -> new ResourceNotFoundException("Member not found for user: " + principal.getName()));
-        Loan loan = loanService.checkoutBook(loanRequestDTO.getBookInstanceId(), member.getId(), loanRequestDTO.getDueDate());
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + principal.getName()));
+
+        boolean isLibrarian = user.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ROLE_LIBRARIAN"));
+
+        Long targetMemberId;
+
+        if (isLibrarian) {
+            // Librarian must provide memberId
+            if (loanRequestDTO.getMemberId() == null) {
+                throw new IllegalArgumentException("Librarian must provide memberId");
+            }
+            targetMemberId = loanRequestDTO.getMemberId();
+        } else {
+            // Member checkout for self
+            Member member = memberRepository.findByUser(user)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Member profile not found for user: " + principal.getName()));
+            targetMemberId = member.getId();
+        }
+
+        Loan loan = loanService.checkoutBook(loanRequestDTO.getBookInstanceId(), targetMemberId,
+                loanRequestDTO.getDueDate());
         return ResponseEntity.ok(loan);
     }
 
