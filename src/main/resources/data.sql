@@ -1,7 +1,5 @@
 -- This script initializes the database with mock data.
--- To ensure this script runs, add the following to your application.properties:
--- spring.sql.init.mode=always
--- spring.jpa.defer-datasource-initialization=true
+
 
 -- Clear existing data
 DELETE FROM loan;
@@ -31,9 +29,9 @@ INSERT INTO roles (id, name) VALUES (2, 'ROLE_MEMBER');
 
 -- Create Users
 -- Passwords are bcrypt encoded for "password"
-INSERT INTO users (id, username, password) VALUES (1, 'librarian', '$2a$10$8.A3./aR.29v/i95n6d4COyLBI3a/dbyy25J5Ie1dDbk5X9T.bJtC');
-INSERT INTO users (id, username, password) VALUES (2, 'member1', '$2a$10$8.A3./aR.29v/i95n6d4COyLBI3a/dbyy25J5Ie1dDbk5X9T.bJtC');
-INSERT INTO users (id, username, password) VALUES (3, 'member2', '$2a$10$8.A3./aR.29v/i95n6d4COyLBI3a/dbyy25J5Ie1dDbk5X9T.bJtC');
+INSERT INTO users (id, username, password) VALUES (1, 'librarian', '$2a$10$y69xckW3NmcINguy31s.k.v4TXNsn4eLCsRmnewo17xMvIouQ/Q7u');
+INSERT INTO users (id, username, password) VALUES (2, 'member1', '$2a$10$y69xckW3NmcINguy31s.k.v4TXNsn4eLCsRmnewo17xMvIouQ/Q7u');
+INSERT INTO users (id, username, password) VALUES (3, 'member2', '$2a$10$y69xckW3NmcINguy31s.k.v4TXNsn4eLCsRmnewo17xMvIouQ/Q7u');
 
 
 -- Link Users to Roles

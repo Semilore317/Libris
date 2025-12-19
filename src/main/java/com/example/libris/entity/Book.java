@@ -1,6 +1,5 @@
 package com.example.libris.entity;
 
-
 import com.example.libris.enums.BookGenre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,4 +30,7 @@ public class Book {
     @Enumerated(EnumType.STRING)
     private BookGenre genre;
     private Year publicationYear;
+
+    @OneToMany(mappedBy = "book")
+    private java.util.List<BookInstance> instances;
 }

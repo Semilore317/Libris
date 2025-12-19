@@ -21,7 +21,7 @@ public class Loan {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "book_instance_id", unique = true)
+    @JoinColumn(name = "book_instance_id")
     private BookInstance bookInstance;
 
     @ManyToOne(optional = false)
