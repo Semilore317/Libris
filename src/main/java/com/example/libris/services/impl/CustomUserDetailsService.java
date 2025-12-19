@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+import org.springframework.context.annotation.Primary;
+
 @Service
+@Primary
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

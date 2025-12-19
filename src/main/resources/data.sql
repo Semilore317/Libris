@@ -9,24 +9,25 @@ DELETE FROM reservation;
 DELETE FROM book_instance;
 DELETE FROM book;
 DELETE FROM member;
-DELETE FROM users_roles;
-DELETE FROM role;
+DELETE FROM user_roles;
+DELETE FROM roles;
 DELETE FROM users;
 
 
 -- Reset sequences for PostgreSQL
-ALTER SEQUENCE loan_id_seq RESTART WITH 1;
-ALTER SEQUENCE reservation_id_seq RESTART WITH 1;
-ALTER SEQUENCE book_instance_id_seq RESTART WITH 1;
-ALTER SEQUENCE book_id_seq RESTART WITH 1;
-ALTER SEQUENCE member_id_seq RESTART WITH 1;
-ALTER SEQUENCE role_id_seq RESTART WITH 1;
-ALTER SEQUENCE users_id_seq RESTART WITH 1;
+-- Reset sequences for PostgreSQL
+-- ALTER SEQUENCE loan_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE reservation_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE book_instance_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE book_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE member_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE roles_id_seq RESTART WITH 1;
+-- ALTER SEQUENCE users_id_seq RESTART WITH 1;
 
 
 -- Create Roles
-INSERT INTO role (id, name) VALUES (1, 'ROLE_LIBRARIAN');
-INSERT INTO role (id, name) VALUES (2, 'ROLE_MEMBER');
+INSERT INTO roles (id, name) VALUES (1, 'ROLE_LIBRARIAN');
+INSERT INTO roles (id, name) VALUES (2, 'ROLE_MEMBER');
 
 -- Create Users
 -- Passwords are bcrypt encoded for "password"
@@ -36,18 +37,18 @@ INSERT INTO users (id, username, password) VALUES (3, 'member2', '$2a$10$8.A3./a
 
 
 -- Link Users to Roles
-INSERT INTO users_roles (user_id, role_id) VALUES (1, 1);
-INSERT INTO users_roles (user_id, role_id) VALUES (2, 2);
-INSERT INTO users_roles (user_id, role_id) VALUES (3, 2);
+INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);
+INSERT INTO user_roles (user_id, role_id) VALUES (3, 2);
 
 -- Create Members
-INSERT INTO member (id, full_name, email, membership_number, user_id) VALUES (1, 'John Doe', 'john.doe@example.com', 'MEMBER-001', 2);
-INSERT INTO member (id, full_name, email, membership_number, user_id) VALUES (2, 'Jane Smith', 'jane.smith@example.com', 'MEMBER-002', 3);
+INSERT INTO member (id, first_name, last_name, email, membership_number, user_id, joined_at) VALUES (1, 'John', 'Doe', 'john.doe@example.com', 'MEMBER-001', 2, '2025-01-15');
+INSERT INTO member (id, first_name, last_name, email, membership_number, user_id, joined_at) VALUES (2, 'Jane', 'Smith', 'jane.smith@example.com', 'MEMBER-002', 3, '2025-01-15');
 
 -- Create Books
-INSERT INTO book (id, title, author, isbn, published_date, genre) VALUES (1, 'Dune', 'Frank Herbert', '978-0441013593', '1965-08-01', 'SCIENCE_FICTION');
-INSERT INTO book (id, title, author, isbn, published_date, genre) VALUES (2, '1984', 'George Orwell', '978-0451524935', '1949-06-08', 'DYSTOPIAN');
-INSERT INTO book (id, title, author, isbn, published_date, genre) VALUES (3, 'The Hobbit', 'J.R.R. Tolkien', '978-0345339683', '1937-09-21', 'FANTASY');
+INSERT INTO book (id, title, author, isbn, publication_year, genre) VALUES (1, 'Dune', 'Frank Herbert', '978-0441013593', 1965, 'SCIENCE_FICTION');
+INSERT INTO book (id, title, author, isbn, publication_year, genre) VALUES (2, '1984', 'George Orwell', '978-0451524935', 1949, 'FICTION');
+INSERT INTO book (id, title, author, isbn, publication_year, genre) VALUES (3, 'The Hobbit', 'J.R.R. Tolkien', '978-0345339683', 1937, 'FANTASY');
 
 -- Create Book Instances
 -- 3 copies of Dune
@@ -69,4 +70,4 @@ INSERT INTO loan (id, book_instance_id, member_id, borrowed_at, due_date) VALUES
 INSERT INTO loan (id, book_instance_id, member_id, borrowed_at, due_date) VALUES (3, 6, 1, '2025-11-01T11:00:00', '2025-12-01T23:59:59');
 
 -- Create a reservation for an unavailable book
-INSERT INTO reservation (id, book_id, member_id, reservation_date, status) VALUES (1, 3, 2, '2025-12-15T10:00:00', 'ACTIVE');
+INSERT INTO reservation (id, book_id, member_id, reserved_at, status) VALUES (1, 3, 2, '2025-12-15T10:00:00', 'PENDING');
