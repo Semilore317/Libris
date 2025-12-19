@@ -11,6 +11,9 @@ public class LoanRequestDTO {
     @NotNull(message = "Book instance ID cannot be null")
     private Long bookInstanceId;
 
+    @NotNull(message = "Member ID cannot be null")
+    private Long memberId;
+
 
     @NotNull(message = "Due date cannot be null")
     @FutureOrPresent(message = "Due date must be today or in the future")

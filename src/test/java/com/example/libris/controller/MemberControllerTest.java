@@ -29,6 +29,18 @@ public class MemberControllerTest {
     @MockBean
     private MemberService memberService;
 
+    @MockBean
+    private com.example.libris.config.JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private com.example.libris.services.impl.CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private com.example.libris.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.example.libris.repository.MemberRepository memberRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
 

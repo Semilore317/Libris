@@ -18,8 +18,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.security.Principal;
 @WebMvcTest(LoanController.class)
 public class LoanControllerTest {
 
@@ -28,6 +30,12 @@ public class LoanControllerTest {
 
     @MockBean
     private LoanService loanService;
+
+    @MockBean
+    private com.example.libris.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.example.libris.repository.MemberRepository memberRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,8 +53,18 @@ public class LoanControllerTest {
         loan.setDueDate(requestDTO.getDueDate().atStartOfDay());
 
         given(loanService.checkoutBook(anyLong(), anyLong(), any(LocalDate.class))).willReturn(loan);
+        Principal principal = () -> "user";
+        com.example.libris.entity.User user = new com.example.libris.entity.User();
+        user.setId(1L);
+        user.setUsername("user");
+        com.example.libris.entity.Member member = new com.example.libris.entity.Member();
+        member.setId(1L);
+        member.setUser(user);
+        given(userRepository.findByUsername("user")).willReturn(java.util.Optional.of(user));
+        given(memberRepository.findByUser(user)).willReturn(java.util.Optional.of(member));
 
         mockMvc.perform(post("/api/v1/loans/checkout")
+                        .principal(principal)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk());
