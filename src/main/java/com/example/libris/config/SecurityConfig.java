@@ -78,6 +78,11 @@ public class SecurityConfig {
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
+    //
+    //
+    //
+    //
+    //
     return http.build();
     /// some other stuff
     ///
@@ -90,7 +95,17 @@ public class SecurityConfig {
     ///
     ///
     ///
+    ///
+    ///
   }
+  //
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
 }
 
 /// a different thing
