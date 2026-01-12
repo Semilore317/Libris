@@ -1,0 +1,33 @@
+meta {
+  name: Add Member
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/members
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{jwt_token}}
+}
+
+body:json {
+  {
+      "username": "peter.parker",
+      "password": "password",
+      "firstName": "Peter",
+      "lastName": "Parker",
+      "email": "peter.parker@dailybugle.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

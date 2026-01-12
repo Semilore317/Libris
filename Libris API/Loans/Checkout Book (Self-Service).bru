@@ -1,0 +1,30 @@
+meta {
+  name: Checkout Book (Self-Service)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/loans/checkout
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{jwt_token}}
+}
+
+body:json {
+  {
+    "bookInstanceId": 4,
+    "dueDate": "2025-12-31"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

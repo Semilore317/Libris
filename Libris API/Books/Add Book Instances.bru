@@ -1,0 +1,30 @@
+meta {
+  name: Add Book Instances
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/books/instances
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{jwt_token}}
+}
+
+body:json {
+  {
+    "bookId": 1,
+    "quantity": 5
+  }
+}
+
+settings {
+  encodeUrl: true
+}

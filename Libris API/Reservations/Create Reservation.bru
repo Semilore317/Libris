@@ -1,0 +1,23 @@
+meta {
+  name: Create Reservation
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/reservations?bookId=3
+  body: none
+  auth: bearer
+}
+
+params:query {
+  bookId: 3
+}
+
+auth:bearer {
+  token: {{jwt_token}}
+}
+
+settings {
+  encodeUrl: true
+}

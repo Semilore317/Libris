@@ -1,0 +1,19 @@
+meta {
+  name: Search Books
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/books/search?query=Tolkien
+  body: none
+  auth: inherit
+}
+
+params:query {
+  query: Tolkien
+}
+
+settings {
+  encodeUrl: true
+}

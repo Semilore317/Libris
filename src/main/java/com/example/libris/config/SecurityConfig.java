@@ -22,8 +22,6 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-// ... other imports
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -81,3 +79,9 @@ public class SecurityConfig {
         return http.build();
     }
 }
+
+/// a different thing
+///
+///
+///
+///

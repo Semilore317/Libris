@@ -1,0 +1,19 @@
+meta {
+  name: My Loan History
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/loans/my-history
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{jwt_token}}
+}
+
+settings {
+  encodeUrl: true
+}
