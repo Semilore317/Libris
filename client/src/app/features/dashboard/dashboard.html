@@ -1,0 +1,61 @@
+<div class="space-y-12">
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    @for (stat of stats(); track stat.label) {
+      <app-card>
+        <span value>{{ stat.value }}</span>
+        <span label>{{ stat.label }}</span>
+        <div class="mt-2 text-[10px] font-bold uppercase opacity-40">
+          {{ stat.change }}
+        </div>
+      </app-card>
+    }
+  </div>
+
+  <!-- Recent Activity Section -->
+  <div class="space-y-6">
+    <h3 class="text-2xl font-black border-b-4 border-black pb-2 inline-block">Recent System Events</h3>
+    
+    <div class="brutal-border brutal-shadow bg-white overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
+            <th class="p-4 border-r border-white/20">Event Profile</th>
+            <th class="p-4 border-r border-white/20">Target Instance</th>
+            <th class="p-4 border-r border-white/20">Authorized Operator</th>
+            <th class="p-4">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y-2 divide-black">
+          @for (event of recentActivities(); track event.time) {
+            <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
+              <td class="p-4 border-r-2 border-black">{{ event.action }}</td>
+              <td class="p-4 border-r-2 border-black">{{ event.target }}</td>
+              <td class="p-4 border-r-2 border-black">{{ event.user }}</td>
+              <td class="p-4 opacity-60 text-xs">{{ event.time }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="brutal-card flex flex-col items-start gap-4">
+      <h4 class="font-black">Inventory Search</h4>
+      <p class="text-xs opacity-60 uppercase">Query the global book catalog database.</p>
+      <button class="brutal-button mt-auto">Query DB</button>
+    </div>
+    <div class="brutal-card flex flex-col items-start gap-4">
+      <h4 class="font-black">Member Registry</h4>
+      <p class="text-xs opacity-60 uppercase">Manage authorized library personnel and members.</p>
+      <button class="brutal-button mt-auto">Open Registry</button>
+    </div>
+    <div class="brutal-card bg-black text-white flex flex-col items-start gap-4">
+      <h4 class="font-black">Terminal Access</h4>
+      <p class="text-xs opacity-60 uppercase">Manual override and system diagnostics.</p>
+      <button class="brutal-button bg-white text-black mt-auto">Open Shell</button>
+    </div>
+  </div>
+</div>

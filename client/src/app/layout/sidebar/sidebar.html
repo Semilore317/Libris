@@ -1,0 +1,27 @@
+<div class="h-screen w-64 brutal-border bg-white p-8 flex flex-col gap-12">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 bg-black"></div>
+    <h1 class="text-2xl font-black">LIBRIS</h1>
+  </div>
+
+  <nav class="flex flex-col gap-4">
+    <a routerLink="/dashboard" routerLinkActive="bg-black text-white" class="px-4 py-2 font-bold hover:bg-surface-100 transition-colors uppercase border-b-2 border-black">
+      Dashboard
+    </a>
+    <a routerLink="/books" routerLinkActive="bg-black text-white" class="px-4 py-2 font-bold hover:bg-surface-100 transition-colors uppercase border-b-2 border-black">
+      Books
+    </a>
+    <a routerLink="/members" routerLinkActive="bg-black text-white" class="px-4 py-2 font-bold hover:bg-surface-100 transition-colors uppercase border-b-2 border-black">
+      Members
+    </a>
+    <a routerLink="/loans" routerLinkActive="bg-black text-white" class="px-4 py-2 font-bold hover:bg-surface-100 transition-colors uppercase border-b-2 border-black">
+      Loans
+    </a>
+  </nav>
+
+  <div class="mt-auto">
+    <button (click)="logout()" class="w-full brutal-button">
+      Logout
+    </button>
+  </div>
+</div>
