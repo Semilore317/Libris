@@ -22,6 +22,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  hasRole(role: string): boolean {
+    return this.userSignal()?.roles.includes(role) ?? false;
+  }
+
   login(credentials: { username: string; password: any }): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/login`, credentials).pipe(
       tap(response => {
