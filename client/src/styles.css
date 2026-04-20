@@ -9,11 +9,19 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-bold uppercase tracking-tight;
+    @apply font-black uppercase tracking-tighter;
+  }
+
+  h2 {
+    @apply text-5xl;
   }
 }
 
 @layer utilities {
+  .terminal-text {
+    @apply font-bold uppercase text-[10px] tracking-widest opacity-40;
+  }
+
   .brutal-border {
     @apply border-2 border-black;
   }

@@ -1,68 +1,80 @@
-<div class="space-y-12">
+<div class="space-y-12 max-w-7xl">
+  <!-- Hero Header -->
+  <div class="flex flex-col gap-2 border-b-4 border-black pb-8">
+    <div class="flex items-center gap-4">
+      <span class="w-3 h-3 bg-black animate-pulse"></span>
+      <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">System Status: Active</span>
+    </div>
+    <h2 class="text-6xl font-black uppercase tracking-tighter leading-none">Global_Archive_Overview</h2>
+    <p class="text-sm font-bold uppercase opacity-60 max-w-2xl">
+      Real-time synchronization with central library repository. Monitoring all active deployments and operator registry.
+    </p>
+  </div>
+
   <!-- Stats Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     @if (summary(); as s) {
-      <app-card>
-        <span value>{{ s.totalBooks }}</span>
-        <span label>TOTAL_COLLECTION</span>
-      </app-card>
-      <app-card>
-        <span value>{{ s.availableBooks }}</span>
-        <span label>AVAILABLE_UNITS</span>
-      </app-card>
-      <app-card>
-        <span value>{{ s.totalMembers }}</span>
-        <span label>AUTHORIZED_MEMBERS</span>
-      </app-card>
-      <app-card>
-        <span value>{{ s.activeLoans }}</span>
-        <span label>ACTIVE_DEPLOYMENTS</span>
-      </app-card>
+      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Total Collection</div>
+        <div class="text-4xl font-black">{{ s.totalBooks }}</div>
+      </div>
+      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Available Units</div>
+        <div class="text-4xl font-black">{{ s.availableBooks }}</div>
+      </div>
+      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Registry Size</div>
+        <div class="text-4xl font-black">{{ s.totalMembers }}</div>
+      </div>
+      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Active Loans</div>
+        <div class="text-4xl font-black">{{ s.activeLoans }}</div>
+      </div>
     } @else {
-      <div class="col-span-full font-bold uppercase animate-pulse">Retrieving archive summary...</div>
+      <div class="col-span-full font-bold uppercase animate-pulse p-12 bg-black text-white text-center">INITIALIZING_ARCHIVE_DATA...</div>
     }
   </div>
 
-  <!-- Recent Activity Section -->
-  <div class="space-y-6">
-    <h3 class="text-2xl font-black border-b-4 border-black pb-2 inline-block">Recent System Events</h3>
-    
-    <div class="brutal-border brutal-shadow bg-white overflow-hidden">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
-            <th class="p-4 border-r border-white/20">Event Profile</th>
-            <th class="p-4 border-r border-white/20">Target Instance</th>
-            <th class="p-4 border-r border-white/20">Authorized Operator</th>
-            <th class="p-4">Timestamp</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y-2 divide-black">
-          <!-- TODO: Wire up activity feed from backend -->
-          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
-            <td colspan="4" class="p-8 text-center opacity-40">Archive history retrieval pending...</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Recent Activity & Quick Actions -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <!-- Main Activity -->
+    <div class="lg:col-span-2 space-y-6">
+      <h3 class="text-xl font-black uppercase">Recent System Events</h3>
+      <div class="brutal-border bg-white overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-black text-white uppercase text-[10px] font-black tracking-widest">
+              <th class="p-4">Profile</th>
+              <th class="p-4">Instance</th>
+              <th class="p-4">Operator</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y-2 divide-black">
+            <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-xs">
+              <td colspan="3" class="p-12 text-center opacity-40">Awaiting live event sync...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <!-- Quick Actions -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="brutal-card flex flex-col items-start gap-4">
-      <h4 class="font-black">Inventory Search</h4>
-      <p class="text-xs opacity-60 uppercase">Query the global book catalog database.</p>
-      <button class="brutal-button mt-auto">Query DB</button>
-    </div>
-    <div class="brutal-card flex flex-col items-start gap-4">
-      <h4 class="font-black">Member Registry</h4>
-      <p class="text-xs opacity-60 uppercase">Manage authorized library personnel and members.</p>
-      <button class="brutal-button mt-auto">Open Registry</button>
-    </div>
-    <div class="brutal-card bg-black text-white flex flex-col items-start gap-4">
-      <h4 class="font-black">Terminal Access</h4>
-      <p class="text-xs opacity-60 uppercase">Manual override and system diagnostics.</p>
-      <button class="brutal-button bg-white text-black mt-auto">Open Shell</button>
+    <!-- Quick Utilities -->
+    <div class="space-y-6">
+      <h3 class="text-xl font-black uppercase">System Utilities</h3>
+      <div class="flex flex-col gap-4">
+        <button class="brutal-button w-full text-left flex justify-between items-center group">
+          <span>Search Archive</span>
+          <span class="opacity-0 group-hover:opacity-100">→</span>
+        </button>
+        <button class="brutal-button w-full text-left flex justify-between items-center group">
+          <span>Manage Registry</span>
+          <span class="opacity-0 group-hover:opacity-100">→</span>
+        </button>
+        <button class="brutal-button w-full bg-white text-black text-left flex justify-between items-center group">
+          <span>Terminal Diagnostics</span>
+          <span class="opacity-0 group-hover:opacity-100">→</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
