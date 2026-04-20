@@ -79,3 +79,12 @@ VALUES (2, 5, 2, '2025-12-10T14:30:00', '2026-01-10T23:59:59');
 -- Reservations
 INSERT INTO reservation (id, book_id, member_id, reserved_at, status) 
 VALUES (1, 2, 3, '2025-12-15T09:00:00', 'PENDING'); -- Tony reserved Clean Code
+
+-- Sync Sequences (Necessary because of manual ID inserts)
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+SELECT setval('roles_id_seq', (SELECT MAX(id) FROM roles));
+SELECT setval('member_id_seq', (SELECT MAX(id) FROM member));
+SELECT setval('book_id_seq', (SELECT MAX(id) FROM book));
+SELECT setval('book_instance_id_seq', (SELECT MAX(id) FROM book_instance));
+SELECT setval('loan_id_seq', (SELECT MAX(id) FROM loan));
+SELECT setval('reservation_id_seq', (SELECT MAX(id) FROM reservation));
