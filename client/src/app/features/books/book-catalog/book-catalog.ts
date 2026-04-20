@@ -2,13 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BookService, Book } from '../../../core/services/book';
-import { CardComponent } from '../../../shared/components/card/card';
 import { ButtonComponent } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-book-catalog',
   standalone: true,
-  imports: [CommonModule, RouterLink, CardComponent, ButtonComponent],
+  imports: [CommonModule, RouterLink, ButtonComponent],
   templateUrl: './book-catalog.html',
   styleUrl: './book-catalog.css',
 })

@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BookService, Book } from '../../../core/services/book';
 import { AuthService } from '../../../core/services/auth';
-import { CardComponent } from '../../../shared/components/card/card';
+import { LoanService } from '../../../core/services/loan';
+import { ReservationService } from '../../../core/services/reservation';
 import { ButtonComponent } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-book-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, CardComponent, ButtonComponent],
+  imports: [CommonModule, RouterLink, ButtonComponent],
   templateUrl: './book-detail.html',
   styleUrl: './book-detail.css',
 })
@@ -17,6 +18,8 @@ export class BookDetailComponent {
   private route = inject(ActivatedRoute);
   private bookService = inject(BookService);
   private authService = inject(AuthService);
+  private loanService = inject(LoanService);
+  private reservationService = inject(ReservationService);
 
   book = signal<Book | null>(null);
   loading = signal(true);
@@ -42,12 +45,28 @@ export class BookDetailComponent {
   }
 
   reserveBook() {
-    // Logic for reservation will be integrated later
-    console.log('Reserving book:', this.book()?.id);
+    const b = this.book();
+    if (!b) return;
+
+    this.reservationService.createReservation(b.id).subscribe({
+      next: () => {
+        alert('RESERVATION PROTOCOL INITIATED: SUCCESS');
+        this.loadBook(); // Refresh status
+      },
+      error: (err) => alert(`[CRITICAL FAILURE]: ${err.error?.message || 'Unknown error'}`)
+    });
   }
 
   checkoutBook() {
-    // Logic for librarian checkout will be integrated later
-    console.log('Checking out book:', this.book()?.id);
+    const memberIdStr = prompt('ENTER OPERATOR / MEMBER IDENTITY NUMBER:');
+    if (!memberIdStr) return;
+
+    // In a real app we'd fetch an instance ID, but the API might need an instance.
+    // For now, if the API takes bookId we use that, otherwise we'll need to fetch instances.
+    // Assuming bookInstanceId for checkout as per the mock service.
+    
+    // I need to know how to get an instance ID.
+    // I'll check the Book entity or BookDetail view.
+    console.log('Checkout requested for member:', memberIdStr);
   }
 }

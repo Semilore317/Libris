@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReportService, DashboardSummary } from '../../core/services/report';
 import { CardComponent } from '../../shared/components/card/card';
 
 @Component({
@@ -10,17 +11,18 @@ import { CardComponent } from '../../shared/components/card/card';
   styleUrl: './dashboard.css',
 })
 export class DashboardComponent {
-  stats = signal([
-    { label: 'Total Inventory', value: '1,424', change: '+12 this week' },
-    { label: 'Active Members', value: '892', change: '+4 this week' },
-    { label: 'Active Loans', value: '156', change: '-2 this week' },
-    { label: 'Pending Reservations', value: '38', change: '+8 this week' }
-  ]);
+  private reportService = inject(ReportService);
+  
+  summary = signal<DashboardSummary | null>(null);
 
-  recentActivities = signal([
-    { action: 'Book Returned', target: 'The Great Gatsby', user: 'frodo.baggins', time: '2 mins ago' },
-    { action: 'New Loan', target: 'Clean Code', user: 'sarah.connor', time: '15 mins ago' },
-    { action: 'Member Joined', target: 'New Account', user: 'samwise.gamgee', time: '1 hour ago' },
-    { action: 'Reservation', target: 'Angular Pro', user: 'frodo.baggins', time: '3 hours ago' }
-  ]);
+  constructor() {
+    this.loadSummary();
+  }
+
+  loadSummary() {
+    this.reportService.getDashboardSummary().subscribe({
+      next: (data) => this.summary.set(data),
+      error: (err) => console.error('Archive retrieval failure:', err)
+    });
+  }
 }

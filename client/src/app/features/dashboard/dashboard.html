@@ -1,14 +1,25 @@
 <div class="space-y-12">
   <!-- Stats Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-    @for (stat of stats(); track stat.label) {
+    @if (summary(); as s) {
       <app-card>
-        <span value>{{ stat.value }}</span>
-        <span label>{{ stat.label }}</span>
-        <div class="mt-2 text-[10px] font-bold uppercase opacity-40">
-          {{ stat.change }}
-        </div>
+        <span value>{{ s.totalBooks }}</span>
+        <span label>TOTAL_COLLECTION</span>
       </app-card>
+      <app-card>
+        <span value>{{ s.availableBooks }}</span>
+        <span label>AVAILABLE_UNITS</span>
+      </app-card>
+      <app-card>
+        <span value>{{ s.totalMembers }}</span>
+        <span label>AUTHORIZED_MEMBERS</span>
+      </app-card>
+      <app-card>
+        <span value>{{ s.activeLoans }}</span>
+        <span label>ACTIVE_DEPLOYMENTS</span>
+      </app-card>
+    } @else {
+      <div class="col-span-full font-bold uppercase animate-pulse">Retrieving archive summary...</div>
     }
   </div>
 
@@ -27,14 +38,10 @@
           </tr>
         </thead>
         <tbody class="divide-y-2 divide-black">
-          @for (event of recentActivities(); track event.time) {
-            <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
-              <td class="p-4 border-r-2 border-black">{{ event.action }}</td>
-              <td class="p-4 border-r-2 border-black">{{ event.target }}</td>
-              <td class="p-4 border-r-2 border-black">{{ event.user }}</td>
-              <td class="p-4 opacity-60 text-xs">{{ event.time }}</td>
-            </tr>
-          }
+          <!-- TODO: Wire up activity feed from backend -->
+          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
+            <td colspan="4" class="p-8 text-center opacity-40">Archive history retrieval pending...</td>
+          </tr>
         </tbody>
       </table>
     </div>
