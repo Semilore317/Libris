@@ -1,0 +1,53 @@
+<div class="space-y-12">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b-8 border-black pb-8">
+    <div>
+      <h2 class="text-6xl font-black uppercase tracking-tighter">Member Registry</h2>
+      <p class="text-sm font-bold uppercase opacity-60 mt-2 tracking-widest">Operator Control // Personnel Database</p>
+    </div>
+    
+    <app-button variant="primary" size="lg">Add New Member</app-button>
+  </div>
+
+  <div class="brutal-border brutal-shadow bg-white overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
+            <th class="p-4 border-r border-white/20">Identity No.</th>
+            <th class="p-4 border-r border-white/20">Name / Designation</th>
+            <th class="p-4 border-r border-white/20">Contact Channel</th>
+            <th class="p-4">Operations</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y-2 divide-black">
+        @for (member of members(); track member.id) {
+          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
+            <td class="p-4 border-r-2 border-black font-black font-mono">{{ member.membershipNumber }}</td>
+            <td class="p-4 border-r-2 border-black">{{ member.fullName }}</td>
+            <td class="p-4 border-r-2 border-black text-xs">
+              <div>{{ member.email }}</div>
+              <div class="opacity-40">{{ member.phoneNumber }}</div>
+            </td>
+            <td class="p-4 flex gap-4">
+              <button class="text-[10px] font-black uppercase hover:underline">Update</button>
+              <button (click)="deleteMember(member.id)" class="text-[10px] font-black uppercase text-red-600 hover:underline">Terminate</button>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading()) {
+            <tr>
+              <td colspan="4" class="p-12 text-center font-black uppercase opacity-40 italic">
+                No personnel records detected in database.
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  }
+</div>

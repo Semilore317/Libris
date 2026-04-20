@@ -1,0 +1,84 @@
+<div class="space-y-12">
+  <div class="flex flex-col gap-6">
+    <a routerLink="/books" class="text-xs font-black uppercase hover:underline">← Return to Archive</a>
+    
+    @if (book(); as b) {
+      <div class="flex flex-col lg:flex-row gap-12">
+        <div class="flex-1 space-y-12">
+          <!-- Main Info -->
+          <div>
+            <span class="text-xs bg-black text-white px-2 py-1 font-black uppercase tracking-widest mb-4 inline-block">
+              {{ b.category }}
+            </span>
+            <h2 class="text-7xl font-black uppercase leading-[0.9] tracking-tighter">{{ b.title }}</h2>
+            <p class="text-2xl font-bold uppercase opacity-60 mt-4 tracking-wider">Document Author // {{ b.author }}</p>
+          </div>
+
+          <!-- Description / Meta -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="brutal-card">
+              <h4 class="font-black uppercase text-sm mb-4 border-b-2 border-black pb-2">Technical Metadata</h4>
+              <ul class="space-y-4 text-sm font-bold uppercase">
+                <li class="flex justify-between">
+                  <span class="opacity-40">System ISBN</span>
+                  <span>{{ b.isbn }}</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="opacity-40">Entity ID</span>
+                  <span>{{ b.id }}</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="opacity-40">Library Division</span>
+                  <span>{{ b.category }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="brutal-card bg-black text-white">
+              <h4 class="font-black uppercase text-sm mb-4 border-b-2 border-white pb-2">Inventory Summary</h4>
+              <div class="text-5xl font-black">{{ b.availableCount }} / {{ b.totalCount }}</div>
+              <p class="text-[10px] font-bold uppercase opacity-60 mt-2">Instances currently available for immediate deployment.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Action Side -->
+        <div class="w-full lg:w-96 flex flex-col gap-8">
+          <div class="brutal-card brutal-shadow bg-white flex flex-col gap-6">
+            <h3 class="text-xl font-black uppercase">System Actions</h3>
+            
+            @if (isLibrarian()) {
+              <app-button variant="primary" (click)="checkoutBook()" class="w-full">
+                Manual Checkout
+              </app-button>
+              <app-button variant="secondary" class="w-full">
+                Add New Instance
+              </app-button>
+            } @else if (isMember()) {
+              @if (b.availableCount > 0) {
+                <app-button variant="primary" (click)="reserveBook()" class="w-full">
+                  Place Reservation
+                </app-button>
+              } @else {
+                <div class="p-4 brutal-border bg-surface-100 text-xs font-black uppercase text-center opacity-50">
+                  Instance Exhausted // No Availability
+                </div>
+              }
+            }
+          </div>
+
+          <div class="p-6 brutal-border border-dashed border-4">
+            <h4 class="font-black text-xs uppercase mb-2">Notice</h4>
+            <p class="text-[10px] font-bold uppercase opacity-60"> All library interactions are recorded in the central audit ledger under your unique identification token. </p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  }
+</div>

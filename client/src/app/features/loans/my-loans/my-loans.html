@@ -1,0 +1,57 @@
+<div class="space-y-12">
+  <div class="border-b-8 border-black pb-8">
+    <h2 class="text-6xl font-black uppercase tracking-tighter">My Activity Ledger</h2>
+    <p class="text-sm font-bold uppercase opacity-60 mt-2 tracking-widest">User Transaction History // Active Deployments</p>
+  </div>
+
+  <div class="brutal-border brutal-shadow bg-white overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
+            <th class="p-4 border-r border-white/20">Entity Instance</th>
+            <th class="p-4 border-r border-white/20">Deployment Date</th>
+            <th class="p-4 border-r border-white/20">Return Deadline</th>
+            <th class="p-4">Status Code</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y-2 divide-black">
+        @for (loan of loans(); track loan.id) {
+          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
+            <td class="p-4 border-r-2 border-black">
+              <div class="font-black">{{ loan.bookInstance.book.title }}</div>
+              <div class="text-[10px] opacity-40">BY // {{ loan.bookInstance.book.author }}</div>
+            </td>
+            <td class="p-4 border-r-2 border-black font-mono text-xs">{{ loan.loanDate | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4 border-r-2 border-black font-mono text-xs">{{ loan.dueDate | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4">
+              <span 
+                class="px-2 py-1 text-[10px] font-black uppercase border-2 border-black"
+                [ngClass]="{
+                  'bg-white text-black': loan.status === 'ACTIVE',
+                  'bg-black text-white': loan.status === 'OVERDUE',
+                  'opacity-40 border-dashed': loan.status === 'RETURNED'
+                }"
+              >
+                {{ loan.status }}
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading()) {
+            <tr>
+              <td colspan="4" class="p-12 text-center font-black uppercase opacity-40 italic">
+                No active deployments detected in ledger.
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  }
+</div>
