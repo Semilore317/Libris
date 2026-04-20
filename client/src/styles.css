@@ -1,1 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: oklch(0.962 0.018 272.314);
+  --color-primary-100: oklch(0.925 0.039 272.255);
+  --color-primary-200: oklch(0.858 0.076 273.103);
+  --color-primary-300: oklch(0.777 0.12 273.041);
+  --color-primary-400: oklch(0.662 0.179 273.439);
+  --color-primary-500: oklch(0.556 0.215 275.259);
+  --color-primary-600: oklch(0.468 0.195 277.522);
+  --color-primary-700: oklch(0.395 0.157 277.423);
+  --color-primary-800: oklch(0.328 0.124 277.517);
+  --color-primary-900: oklch(0.278 0.093 277.446);
+  --color-primary-950: oklch(0.184 0.06 277.708);
+
+  --color-surface-50: oklch(0.985 0 0);
+  --color-surface-100: oklch(0.97 0 0);
+  --color-surface-200: oklch(0.92 0 0);
+  --color-surface-300: oklch(0.87 0 0);
+  --color-surface-400: oklch(0.7 0 0);
+  --color-surface-500: oklch(0.56 0 0);
+  --color-surface-600: oklch(0.45 0 0);
+  --color-surface-700: oklch(0.32 0 0);
+  --color-surface-800: oklch(0.19 0 0);
+  --color-surface-900: oklch(0.13 0 0);
+  --color-surface-950: oklch(0.08 0 0);
+}
+
+@layer base {
+  body {
+    @apply bg-surface-950 text-surface-50 antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-900/50 backdrop-blur-md border border-surface-800/50;
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl shadow-xl hover:shadow-primary-500/10 transition-all duration-300;
+  }
+}
