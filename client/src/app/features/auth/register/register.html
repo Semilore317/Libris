@@ -1,0 +1,92 @@
+<div class="flex min-h-screen bg-white text-black font-mono">
+  <!-- Branding Side -->
+  <div class="hidden lg:flex flex-1 bg-black text-white p-16 flex-col justify-between items-start select-none">
+    <div class="w-16 h-16 bg-white"></div>
+    <div>
+      <h1 class="text-[80px] font-black leading-[0.8] mb-8">JOIN<br>ARCHIVE</h1>
+      <p class="text-xl max-w-sm opacity-80 uppercase font-bold tracking-widest leading-relaxed">
+        Establish your identity within the repository.
+      </p>
+    </div>
+    <div class="text-xs border-t border-white pt-4 w-full opacity-40">
+      MEMBER_ONBOARDING // v1.0
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="flex-1 flex items-center justify-center p-8 bg-surface-50">
+    <div class="w-full max-w-lg p-10 brutal-border brutal-shadow bg-white">
+      <h2 class="text-4xl font-black mb-10 border-b-4 border-black pb-4 uppercase tracking-tighter">New Account</h2>
+      
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-black uppercase opacity-60">First Name</label>
+            <input 
+              type="text" 
+              formControlName="firstName"
+              class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
+              placeholder="NAME_FIRST"
+            >
+          </div>
+          <div class="space-y-1">
+            <label class="block text-[10px] font-black uppercase opacity-60">Last Name</label>
+            <input 
+              type="text" 
+              formControlName="lastName"
+              class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
+              placeholder="NAME_LAST"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-black uppercase opacity-60">Email Protocol</label>
+          <input 
+            type="email" 
+            formControlName="email"
+            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
+            placeholder="OPERATOR@SYSTEM.NET"
+          >
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-black uppercase opacity-60">Username Identity</label>
+          <input 
+            type="text" 
+            formControlName="username"
+            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
+            placeholder="USER_NAME"
+          >
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-black uppercase opacity-60">Passphrase</label>
+          <input 
+            type="password" 
+            formControlName="password"
+            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
+            placeholder="********"
+          >
+        </div>
+
+        <div *ngIf="error()" class="bg-black text-white p-4 font-bold text-xs uppercase brutal-shadow">
+          [CRITICAL ERROR]: {{ error() }}
+        </div>
+
+        <app-button 
+          variant="primary" 
+          size="lg" 
+          class="w-full block" 
+          [disabled]="loading()"
+        >
+          {{ loading() ? 'Establishing...' : 'Confirm Registration' }}
+        </app-button>
+
+        <div class="pt-6 border-t-2 border-black text-center">
+          <a routerLink="/login" class="text-xs font-black uppercase hover:underline">Existing Operator? Sign In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -28,11 +28,22 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
+    private final com.example.libris.services.MemberService memberService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager, 
+                          JwtTokenProvider tokenProvider, 
+                          CustomUserDetailsService customUserDetailsService,
+                          com.example.libris.services.MemberService memberService) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.customUserDetailsService = customUserDetailsService;
+        this.memberService = memberService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<com.example.libris.dto.MemberResponseDTO> register(@Valid @RequestBody com.example.libris.dto.MemberRequestDTO memberRequest) {
+        com.example.libris.dto.MemberResponseDTO newMember = memberService.addMember(memberRequest);
+        return new ResponseEntity<>(newMember, org.springframework.http.HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
