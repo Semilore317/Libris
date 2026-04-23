@@ -1,27 +1,37 @@
-<div class="h-screen w-64 bg-black text-white p-8 flex flex-col gap-12 border-r-2 border-white/10 shadow-[4px_0px_0px_0px_rgba(0,0,0,1)]">
-  <div class="flex items-center gap-2">
-    <div class="w-8 h-8 bg-white"></div>
-    <h1 class="text-2xl font-black tracking-tighter">LIBRIS</h1>
+<div class="h-screen w-64 bg-white text-black p-8 flex flex-col gap-12 border-r border-neutral-100">
+  <div class="flex items-center gap-3">
+    <div class="w-6 h-6 bg-black"></div>
+    <h1 class="text-xl font-bold tracking-tight">Libris</h1>
   </div>
 
-  <nav class="flex flex-col gap-2">
-    <a routerLink="/dashboard" routerLinkActive="bg-white text-black" class="px-4 py-3 font-bold hover:bg-white/10 transition-all uppercase border-b border-white/10 text-xs tracking-widest">
+  <nav class="flex flex-col gap-1">
+    <a routerLink="/dashboard" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
       Dashboard
     </a>
-    <a routerLink="/books" routerLinkActive="bg-white text-black" class="px-4 py-3 font-bold hover:bg-white/10 transition-all uppercase border-b border-white/10 text-xs tracking-widest">
-      Archive
-    </a>
-    <a routerLink="/members" routerLinkActive="bg-white text-black" class="px-4 py-3 font-bold hover:bg-white/10 transition-all uppercase border-b border-white/10 text-xs tracking-widest">
-      Operators
-    </a>
-    <a routerLink="/loans" routerLinkActive="bg-white text-black" class="px-4 py-3 font-bold hover:bg-white/10 transition-all uppercase border-b border-white/10 text-xs tracking-widest">
-      Deployments
-    </a>
+
+    @if (isLibrarian()) {
+      <a routerLink="/books" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Inventory
+      </a>
+      <a routerLink="/members" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Members
+      </a>
+      <a routerLink="/loans/manage" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Manage Loans
+      </a>
+    } @else {
+      <a routerLink="/books" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Catalog
+      </a>
+      <a routerLink="/loans" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        My Loans
+      </a>
+    }
   </nav>
 
-  <div class="mt-auto">
-    <button (click)="logout()" class="w-full brutal-button bg-white text-black border-white shadow-none hover:bg-surface-100">
-      TERMINATE_SESSION
+  <div class="mt-auto pt-8 border-t border-neutral-50">
+    <button (click)="logout()" class="w-full text-left px-4 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
+      Sign Out
     </button>
   </div>
 </div>

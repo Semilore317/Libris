@@ -15,7 +15,7 @@ public class BookMapper {
 
         BookResponseDTO bookResponseDTO = new BookResponseDTO();
         bookResponseDTO.setId(book.getId());
-        bookResponseDTO.setISBN(book.getISBN());
+        bookResponseDTO.setIsbn(book.getISBN()); // Map entity's ISBN to DTO's isbn
         bookResponseDTO.setTitle(book.getTitle());
         bookResponseDTO.setAuthor(book.getAuthor());
         bookResponseDTO.setGenre(book.getGenre());

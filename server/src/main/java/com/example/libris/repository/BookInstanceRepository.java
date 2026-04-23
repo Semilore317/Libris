@@ -13,4 +13,5 @@ public interface BookInstanceRepository extends JpaRepository<BookInstance, Long
     long countByBookId(Long bookId);
     long countByBookIdAndStatus(Long bookId, BookEnum status);
     List<BookInstance> findByBookAndStatus(Book book, BookEnum status);
+    List<BookInstance> findByBookIdAndStatus(Long bookId, BookEnum status);
 }

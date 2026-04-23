@@ -69,6 +69,17 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    public Loan checkoutBookByTitle(Long bookId, Long memberId, java.time.LocalDate dueDate) {
+        // Find an available instance of the book
+        BookInstance bookInstance = bookInstanceRepository.findByBookIdAndStatus(bookId, BookEnum.AVAILABLE)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new BookUnavailableException("No available copies for this book title."));
+
+        return checkoutBook(bookInstance.getId(), memberId, dueDate);
+    }
+
+    @Override
     public Loan returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new ResourceNotFoundException("Loan not found with id: " + loanId));
@@ -106,5 +117,10 @@ public class LoanServiceImpl implements LoanService {
                 .orElseThrow(() -> new ResourceNotFoundException("Member not found for user: " + username));
 
         return loanRepository.findByMember(member);
+    }
+
+    @Override
+    public List<Loan> findAllLoans() {
+        return loanRepository.findAll();
     }
 }

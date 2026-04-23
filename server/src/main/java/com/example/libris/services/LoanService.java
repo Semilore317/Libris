@@ -1,14 +1,15 @@
 package com.example.libris.services;
 
 import com.example.libris.entity.Loan;
-//import com.example.libris.dto.LoanRequestDTO; // Assume a simple DTO exists for input
-
 import java.util.List;
 
 public interface LoanService {
 
     // 1. Checkout Method (Must return the created Loan object)
     Loan checkoutBook(Long bookInstanceId, Long memberId, java.time.LocalDate dueDate);
+    
+    // New: Checkout by Book Title ID (finds an available instance automatically)
+    Loan checkoutBookByTitle(Long bookId, Long memberId, java.time.LocalDate dueDate);
 
     // 2. Return Method (Must handle the date of return and update statuses)
     Loan returnBook(Long loanId);
@@ -21,7 +22,8 @@ public interface LoanService {
 
     List<Loan> findMyLoans(String username);
 
-    // 5. Find Overdue Loans (For your "nice to have" fee calculation)
+    // 5. Find Overdue Loans
     List<Loan> findOverdueLoans();
-    // Method to add physical copies to an existing book title
+
+    List<Loan> findAllLoans();
 }

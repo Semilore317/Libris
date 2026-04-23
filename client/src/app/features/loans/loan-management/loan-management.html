@@ -1,0 +1,58 @@
+<div class="space-y-12">
+  <div class="flex flex-col gap-2 border-b border-neutral-100 pb-8">
+    <h2 class="text-4xl font-bold tracking-tight">Loan Management</h2>
+    <p class="text-sm text-neutral-500">Oversee all active, overdue, and completed loans across the system.</p>
+  </div>
+
+  <div class="minimal-border bg-white overflow-hidden shadow-sm">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-neutral-50 text-neutral-500 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+          <th class="p-4">Book</th>
+          <th class="p-4">Member</th>
+          <th class="p-4">Due Date</th>
+          <th class="p-4 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-neutral-50">
+        @for (loan of loans(); track loan.id) {
+          <tr class="text-sm">
+            <td class="p-4">
+              <div class="font-bold">{{ loan.bookInstance.book.title }}</div>
+              <div class="text-[10px] text-neutral-400">ID: {{ loan.id }}</div>
+            </td>
+            <td class="p-4">
+              <span class="font-medium">{{ loan.member.fullName }}</span>
+              <div class="text-[10px] text-neutral-400">{{ loan.member.membershipNumber }}</div>
+            </td>
+            <td class="p-4">
+              <div [ngClass]="{'text-red-500 font-bold': loan.status === 'OVERDUE'}">
+                {{ loan.dueDate | date:'mediumDate' }}
+              </div>
+              <div class="text-[10px] uppercase font-bold text-neutral-300">{{ loan.status }}</div>
+            </td>
+            <td class="p-4 text-right">
+              @if (!loan.returnedAt) {
+                <app-button (click)="onReturn(loan.id)" variant="secondary" size="sm">
+                  Process Return
+                </app-button>
+              } @else {
+                <span class="text-[10px] font-bold uppercase text-neutral-300">Returned</span>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="p-20 text-center text-neutral-400">
+              @if (loading()) {
+                <div class="animate-pulse">Loading circulation data...</div>
+              } @else {
+                No active loans found in the system.
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

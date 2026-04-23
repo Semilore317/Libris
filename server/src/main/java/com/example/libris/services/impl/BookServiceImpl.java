@@ -34,14 +34,7 @@ public class BookServiceImpl implements BookService {
   @Override
   public List<BookResponseDTO> findAllBooksWithAvailability() {
     return bookRepository.findAll().stream()
-        .map(book -> {
-          BookResponseDTO dto = bookMapper.bookToBookResponseDTO(book);
-          long totalCopies = bookInstanceRepository.countByBookId(book.getId());
-          long availableCopies = bookInstanceRepository.countByBookIdAndStatus(book.getId(), BookEnum.AVAILABLE);
-          dto.setTotalCopies(totalCopies);
-          dto.setAvailableCopies(availableCopies);
-          return dto;
-        })
+        .map(this::mapToResponse)
         .collect(Collectors.toList());
   }
 
@@ -49,26 +42,24 @@ public class BookServiceImpl implements BookService {
   public BookResponseDTO findBookByIdWithAvailability(Long bookId) {
     Book book = bookRepository.findById(bookId)
         .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + bookId));
-    BookResponseDTO dto = bookMapper.bookToBookResponseDTO(book);
-    long totalCopies = bookInstanceRepository.countByBookId(book.getId());
-    long availableCopies = bookInstanceRepository.countByBookIdAndStatus(book.getId(), BookEnum.AVAILABLE);
-    dto.setTotalCopies(totalCopies);
-    dto.setAvailableCopies(availableCopies);
-    return dto;
+    return mapToResponse(book);
   }
 
   @Override
   public List<BookResponseDTO> searchBooks(String query) {
     return bookRepository.searchBooks(query).stream()
-        .map(book -> {
-          BookResponseDTO dto = bookMapper.bookToBookResponseDTO(book);
-          long totalCopies = bookInstanceRepository.countByBookId(book.getId());
-          long availableCopies = bookInstanceRepository.countByBookIdAndStatus(book.getId(), BookEnum.AVAILABLE);
-          dto.setTotalCopies(totalCopies);
-          dto.setAvailableCopies(availableCopies);
-          return dto;
-        })
+        .map(this::mapToResponse)
         .collect(Collectors.toList());
+  }
+
+  private BookResponseDTO mapToResponse(Book book) {
+    BookResponseDTO dto = bookMapper.bookToBookResponseDTO(book);
+    long totalCount = bookInstanceRepository.countByBookId(book.getId());
+    long availableCount = bookInstanceRepository.countByBookIdAndStatus(book.getId(), BookEnum.AVAILABLE);
+    dto.setTotalCount(totalCount);
+    dto.setAvailableCount(availableCount);
+    dto.setIsbn(book.getISBN());
+    return dto;
   }
 
   @Override
@@ -82,7 +73,7 @@ public class BookServiceImpl implements BookService {
   @Transactional
   public List<BookInstance> addInstancesToBook(AddBookInstanceRequestDTO requestDTO) {
     Book book = bookRepository.findById(requestDTO.getBookId())
-        .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + requestDTO.getBookId()));
+        .orElseThrow(() -> new ResourceNotFoundException("Book found with id: " + requestDTO.getBookId()));
 
     List<BookInstance> instances = new ArrayList<>();
     for (int i = 0; i < requestDTO.getQuantity(); i++) {

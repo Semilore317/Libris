@@ -36,4 +36,8 @@ export class BookService {
   createBook(book: Partial<Book>): Observable<Book> {
     return this.http.post<Book>(this.baseUrl, book);
   }
+
+  addInstances(bookId: number, quantity: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/instances`, { bookId, quantity });
+  }
 }

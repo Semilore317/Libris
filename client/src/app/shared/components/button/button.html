@@ -1,9 +1,10 @@
 <button 
-  class="brutal-button"
+  [type]="type"
   [disabled]="disabled"
   [ngClass]="{
-    'bg-black text-white': variant === 'primary',
-    'bg-white text-black': variant === 'secondary' || variant === 'outline',
+    'brutal-button': theme === 'brutal',
+    'minimal-button': theme === 'minimal' && variant === 'primary',
+    'minimal-button-outline': theme === 'minimal' && (variant === 'secondary' || variant === 'outline'),
     'px-4 py-1 text-sm': size === 'sm',
     'px-6 py-2 text-base': size === 'md',
     'px-8 py-3 text-lg': size === 'lg'

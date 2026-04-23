@@ -1,35 +1,35 @@
 <div class="space-y-12">
-  <div class="border-b-8 border-black pb-8">
-    <h2 class="text-6xl font-black uppercase tracking-tighter">My Activity Ledger</h2>
-    <p class="text-sm font-bold uppercase opacity-60 mt-2 tracking-widest">User Transaction History // Active Deployments</p>
+  <div class="border-b border-neutral-100 pb-8">
+    <h2 class="text-4xl font-bold tracking-tight">My Borrowing History</h2>
+    <p class="text-sm text-neutral-500 mt-2">View and track your current loans and borrowing history.</p>
   </div>
 
-  <div class="brutal-border brutal-shadow bg-white overflow-hidden">
+  <div class="minimal-border bg-white overflow-hidden shadow-sm">
     <table class="w-full text-left border-collapse">
       <thead>
-        <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
-            <th class="p-4 border-r border-white/20">Entity Instance</th>
-            <th class="p-4 border-r border-white/20">Deployment Date</th>
-            <th class="p-4 border-r border-white/20">Return Deadline</th>
-            <th class="p-4">Status Code</th>
+        <tr class="bg-neutral-50 text-neutral-400 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+            <th class="p-4">Book</th>
+            <th class="p-4">Loan Date</th>
+            <th class="p-4">Due Date</th>
+            <th class="p-4">Status</th>
         </tr>
       </thead>
-      <tbody class="divide-y-2 divide-black">
+      <tbody class="divide-y divide-neutral-50">
         @for (loan of loans(); track loan.id) {
-          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
-            <td class="p-4 border-r-2 border-black">
-              <div class="font-black">{{ loan.bookInstance.book.title }}</div>
-              <div class="text-[10px] opacity-40">BY // {{ loan.bookInstance.book.author }}</div>
+          <tr class="hover:bg-neutral-50/50 transition-colors text-sm">
+            <td class="p-4">
+              <div class="font-bold">{{ loan.bookInstance.book.title }}</div>
+              <div class="text-[10px] text-neutral-400">{{ loan.bookInstance.book.author }}</div>
             </td>
-            <td class="p-4 border-r-2 border-black font-mono text-xs">{{ loan.loanDate | date:'yyyy.MM.dd' }}</td>
-            <td class="p-4 border-r-2 border-black font-mono text-xs">{{ loan.dueDate | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4 font-mono text-xs text-neutral-500">{{ loan.borrowedAt | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4 font-mono text-xs text-neutral-500">{{ loan.dueDate | date:'yyyy.MM.dd' }}</td>
             <td class="p-4">
               <span 
-                class="px-2 py-1 text-[10px] font-black uppercase border-2 border-black"
+                class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight border"
                 [ngClass]="{
-                  'bg-white text-black': loan.status === 'ACTIVE',
-                  'bg-black text-white': loan.status === 'OVERDUE',
-                  'opacity-40 border-dashed': loan.status === 'RETURNED'
+                  'border-black text-black': loan.status === 'ACTIVE',
+                  'bg-black text-white border-black': loan.status === 'OVERDUE',
+                  'text-neutral-300 border-neutral-100': loan.status === 'RETURNED'
                 }"
               >
                 {{ loan.status }}
@@ -39,8 +39,8 @@
         } @empty {
           @if (!loading()) {
             <tr>
-              <td colspan="4" class="p-12 text-center font-black uppercase opacity-40 italic">
-                No active deployments detected in ledger.
+              <td colspan="4" class="p-12 text-center text-sm text-neutral-400 italic">
+                You have no active loans.
               </td>
             </tr>
           }

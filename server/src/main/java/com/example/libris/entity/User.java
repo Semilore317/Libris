@@ -18,10 +18,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String userType; // LIBRARIAN or MEMBER
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToOne(mappedBy = "user")
     private Member member;
 
@@ -55,5 +58,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

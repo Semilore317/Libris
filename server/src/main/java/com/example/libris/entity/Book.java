@@ -31,6 +31,7 @@ public class Book {
     private BookGenre genre;
     private Year publicationYear;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "book")
     private java.util.List<BookInstance> instances;
 }

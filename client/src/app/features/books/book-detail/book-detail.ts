@@ -1,28 +1,37 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { BookService, Book } from '../../../core/services/book';
+import { MemberService, Member } from '../../../core/services/member';
 import { AuthService } from '../../../core/services/auth';
 import { LoanService } from '../../../core/services/loan';
 import { ReservationService } from '../../../core/services/reservation';
+import { ToastService } from '../../../core/services/toast';
 import { ButtonComponent } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-book-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent],
+  imports: [CommonModule, RouterLink, ButtonComponent, FormsModule],
   templateUrl: './book-detail.html',
   styleUrl: './book-detail.css',
 })
 export class BookDetailComponent {
   private route = inject(ActivatedRoute);
   private bookService = inject(BookService);
+  private memberService = inject(MemberService);
   private authService = inject(AuthService);
   private loanService = inject(LoanService);
   private reservationService = inject(ReservationService);
+  private toastService = inject(ToastService);
 
   book = signal<Book | null>(null);
   loading = signal(true);
+  copyCount = signal(1);
+  memberSearchQuery = signal('');
+  foundMember = signal<Member | null>(null);
+  checkoutLoading = signal(false);
   
   isLibrarian = computed(() => this.authService.hasRole('ROLE_LIBRARIAN'));
   isMember = computed(() => this.authService.hasRole('ROLE_MEMBER'));
@@ -50,23 +59,81 @@ export class BookDetailComponent {
 
     this.reservationService.createReservation(b.id).subscribe({
       next: () => {
-        alert('RESERVATION PROTOCOL INITIATED: SUCCESS');
-        this.loadBook(); // Refresh status
+        this.toastService.success('Book reserved successfully.');
+        this.loadBook();
       },
-      error: (err) => alert(`[CRITICAL FAILURE]: ${err.error?.message || 'Unknown error'}`)
+      error: (err) => this.toastService.error(`Error reserving book: ${err.error?.message || 'Please try again later.'}`)
+    });
+  }
+
+  borrowBook() {
+    const b = this.book();
+    if (!b) return;
+
+    this.checkoutLoading.set(true);
+    this.loanService.checkoutBook(b.id).subscribe({
+      next: () => {
+        this.toastService.success('Book borrowed successfully!');
+        this.loadBook();
+        this.checkoutLoading.set(false);
+      },
+      error: (err) => {
+        this.toastService.error(`Error borrowing book: ${err.error?.message || 'Please try again later.'}`);
+        this.checkoutLoading.set(false);
+      }
+    });
+  }
+
+  lookupMember() {
+    if (!this.memberSearchQuery()) return;
+    this.memberService.getMemberByMembershipNumber(this.memberSearchQuery()).subscribe({
+      next: (m) => this.foundMember.set(m),
+      error: () => {
+        this.toastService.error('Member not found.');
+        this.foundMember.set(null);
+      }
     });
   }
 
   checkoutBook() {
-    const memberIdStr = prompt('ENTER OPERATOR / MEMBER IDENTITY NUMBER:');
-    if (!memberIdStr) return;
+    const book = this.book();
+    const member = this.foundMember();
+    if (!book || !member) return;
 
-    // In a real app we'd fetch an instance ID, but the API might need an instance.
-    // For now, if the API takes bookId we use that, otherwise we'll need to fetch instances.
-    // Assuming bookInstanceId for checkout as per the mock service.
+    this.checkoutLoading.set(true);
+    // Fixed: Passing null as bookInstanceId for now as we don't have instance selection yet, 
+    // but the backend needs a specific instance. For now, let's assume we pick the first available.
+    // Actually, we need an instance ID.
     
-    // I need to know how to get an instance ID.
-    // I'll check the Book entity or BookDetail view.
-    console.log('Checkout requested for member:', memberIdStr);
+    this.loanService.checkoutBook(book.id, member.id).subscribe({
+      next: () => {
+        this.toastService.success('Checkout successful!');
+        this.loadBook();
+        this.foundMember.set(null);
+        this.memberSearchQuery.set('');
+        this.checkoutLoading.set(false);
+      },
+      error: (err) => {
+        this.toastService.error(`Checkout failed: ${err.error?.message || 'Unknown error'}`);
+        this.checkoutLoading.set(false);
+      }
+    });
+  }
+
+  addCopies() {
+    const b = this.book();
+    if (!b || this.copyCount() < 1) return;
+
+    this.loading.set(true);
+    this.bookService.addInstances(b.id, this.copyCount()).subscribe({
+      next: () => {
+        this.loadBook();
+        this.copyCount.set(1);
+      },
+      error: (err) => {
+        console.error('Error adding copies:', err);
+        this.loading.set(false);
+      }
+    });
   }
 }

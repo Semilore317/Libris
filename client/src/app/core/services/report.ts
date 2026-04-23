@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 
 export interface DashboardSummary {
   totalBooks: number;
-  availableBooks: number;
-  totalMembers: number;
+  totalBookCopies: number;
   activeLoans: number;
+  overdueLoans: number;
 }
 
 @Injectable({

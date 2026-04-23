@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 
@@ -12,6 +12,8 @@ import { AuthService } from '../../core/services/auth';
 export class SidebarComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  isLibrarian = computed(() => this.authService.hasRole('ROLE_LIBRARIAN'));
 
   logout() {
     this.authService.logout();

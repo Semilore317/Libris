@@ -1,80 +1,106 @@
 <div class="space-y-12 max-w-7xl">
   <!-- Hero Header -->
-  <div class="flex flex-col gap-2 border-b-4 border-black pb-8">
-    <div class="flex items-center gap-4">
-      <span class="w-3 h-3 bg-black animate-pulse"></span>
-      <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">System Status: Active</span>
+  <div class="flex flex-col gap-2 border-b border-neutral-100 pb-8">
+    <div class="flex items-center gap-3">
+      <span class="w-2 h-2 bg-black"></span>
+      <span class="text-[10px] font-bold uppercase tracking-widest opacity-30">Library Management System</span>
     </div>
-    <h2 class="text-6xl font-black uppercase tracking-tighter leading-none">Global_Archive_Overview</h2>
-    <p class="text-sm font-bold uppercase opacity-60 max-w-2xl">
-      Real-time synchronization with central library repository. Monitoring all active deployments and operator registry.
+    <h2 class="text-4xl font-bold tracking-tight">
+      {{ isLibrarian() ? 'System Dashboard' : 'My Library' }}
+    </h2>
+    <p class="text-sm text-neutral-500 max-w-2xl">
+      {{ isLibrarian() 
+          ? 'Manage your collection, track loans, and oversee member activities from one central hub.' 
+          : 'Track your current loans, explore the catalog, and manage your reservations.' 
+      }}
     </p>
   </div>
 
   <!-- Stats Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    @if (summary(); as s) {
-      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Total Collection</div>
-        <div class="text-4xl font-black">{{ s.totalBooks }}</div>
-      </div>
-      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Available Units</div>
-        <div class="text-4xl font-black">{{ s.availableBooks }}</div>
-      </div>
-      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Registry Size</div>
-        <div class="text-4xl font-black">{{ s.totalMembers }}</div>
-      </div>
-      <div class="p-6 bg-white brutal-border shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-        <div class="text-[10px] font-black opacity-40 uppercase mb-2">Active Loans</div>
-        <div class="text-4xl font-black">{{ s.activeLoans }}</div>
-      </div>
+    @if (isLibrarian()) {
+      @if (summary(); as s) {
+        <div class="minimal-card">
+          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Total Collection</div>
+          <div class="text-3xl font-bold">{{ s.totalBooks }}</div>
+        </div>
+        <div class="minimal-card">
+          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Inventory Copies</div>
+          <div class="text-3xl font-bold">{{ s.totalBookCopies }}</div>
+        </div>
+        <div class="minimal-card">
+          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Active Loans</div>
+          <div class="text-3xl font-bold">{{ s.activeLoans }}</div>
+        </div>
+        <div class="minimal-card">
+          <div class="text-[10px] font-bold text-red-400 uppercase tracking-wider mb-2">Overdue Books</div>
+          <div class="text-3xl font-bold text-red-500">{{ s.overdueLoans }}</div>
+        </div>
+      } @else {
+        <div class="col-span-full font-medium py-12 text-neutral-400 text-center animate-pulse">Loading dashboard data...</div>
+      }
     } @else {
-      <div class="col-span-full font-bold uppercase animate-pulse p-12 bg-black text-white text-center">INITIALIZING_ARCHIVE_DATA...</div>
+      <!-- Member Stats -->
+      <div class="minimal-card">
+        <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">My Active Loans</div>
+        <div class="text-3xl font-bold">{{ myLoans().length }}</div>
+      </div>
+      <div class="minimal-card">
+        <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Due Soon</div>
+        <div class="text-3xl font-bold">0</div>
+      </div>
+      <div class="minimal-card">
+        <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Pending Reservations</div>
+        <div class="text-3xl font-bold">0</div>
+      </div>
     }
   </div>
 
-  <!-- Recent Activity & Quick Actions -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-    <!-- Main Activity -->
-    <div class="lg:col-span-2 space-y-6">
-      <h3 class="text-xl font-black uppercase">Recent System Events</h3>
-      <div class="brutal-border bg-white overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-black text-white uppercase text-[10px] font-black tracking-widest">
-              <th class="p-4">Profile</th>
-              <th class="p-4">Instance</th>
-              <th class="p-4">Operator</th>
+  <!-- Recent Activity / Current Loans -->
+  <div class="space-y-6">
+    <h3 class="text-lg font-bold">{{ isLibrarian() ? 'Recent Activities' : 'My Current Loans' }}</h3>
+    <div class="minimal-border bg-white overflow-hidden shadow-sm">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-neutral-50 text-neutral-500 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+            @if (isLibrarian()) {
+              <th class="p-4">Member</th>
+              <th class="p-4">Book</th>
+              <th class="p-4">Action</th>
+            } @else {
+              <th class="p-4">Book Title</th>
+              <th class="p-4">Due Date</th>
+              <th class="p-4">Status</th>
+            }
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-50">
+          @if (isLibrarian()) {
+            <tr class="text-sm">
+              <td colspan="3" class="p-12 text-center text-neutral-400">No recent activities found.</td>
             </tr>
-          </thead>
-          <tbody class="divide-y-2 divide-black">
-            <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-xs">
-              <td colspan="3" class="p-12 text-center opacity-40">Awaiting live event sync...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Quick Utilities -->
-    <div class="space-y-6">
-      <h3 class="text-xl font-black uppercase">System Utilities</h3>
-      <div class="flex flex-col gap-4">
-        <button class="brutal-button w-full text-left flex justify-between items-center group">
-          <span>Search Archive</span>
-          <span class="opacity-0 group-hover:opacity-100">→</span>
-        </button>
-        <button class="brutal-button w-full text-left flex justify-between items-center group">
-          <span>Manage Registry</span>
-          <span class="opacity-0 group-hover:opacity-100">→</span>
-        </button>
-        <button class="brutal-button w-full bg-white text-black text-left flex justify-between items-center group">
-          <span>Terminal Diagnostics</span>
-          <span class="opacity-0 group-hover:opacity-100">→</span>
-        </button>
-      </div>
+          } @else {
+            @for (loan of myLoans(); track loan.id) {
+              <tr class="text-sm">
+                <td class="p-4">
+                  <div class="font-bold">{{ loan.bookInstance.book.title }}</div>
+                  <div class="text-[10px] text-neutral-400">{{ loan.bookInstance.book.author }}</div>
+                </td>
+                <td class="p-4">{{ loan.dueDate | date:'mediumDate' }}</td>
+                <td class="p-4">
+                  <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-tight bg-neutral-100">
+                    {{ loan.status }}
+                  </span>
+                </td>
+              </tr>
+            } @empty {
+              <tr class="text-sm">
+                <td colspan="3" class="p-12 text-center text-neutral-400">You have no active loans.</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

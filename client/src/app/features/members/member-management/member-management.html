@@ -1,42 +1,44 @@
 <div class="space-y-12">
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b-8 border-black pb-8">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-neutral-100 pb-8">
     <div>
-      <h2 class="text-6xl font-black uppercase tracking-tighter">Member Registry</h2>
-      <p class="text-sm font-bold uppercase opacity-60 mt-2 tracking-widest">Operator Control // Personnel Database</p>
+      <h2 class="text-4xl font-bold tracking-tight">Member Registry</h2>
+      <p class="text-sm text-neutral-500 mt-2">Manage library members and their access status.</p>
     </div>
     
     <app-button variant="primary" size="lg">Add New Member</app-button>
   </div>
 
-  <div class="brutal-border brutal-shadow bg-white overflow-hidden">
+  <div class="minimal-border bg-white overflow-hidden shadow-sm">
     <table class="w-full text-left border-collapse">
       <thead>
-        <tr class="bg-black text-white uppercase text-xs font-black tracking-widest">
-            <th class="p-4 border-r border-white/20">Identity No.</th>
-            <th class="p-4 border-r border-white/20">Name / Designation</th>
-            <th class="p-4 border-r border-white/20">Contact Channel</th>
-            <th class="p-4">Operations</th>
+        <tr class="bg-neutral-50 text-neutral-400 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+            <th class="p-4">Member ID</th>
+            <th class="p-4">Full Name</th>
+            <th class="p-4">Contact Details</th>
+            <th class="p-4">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y-2 divide-black">
+      <tbody class="divide-y divide-neutral-50">
         @for (member of members(); track member.id) {
-          <tr class="hover:bg-surface-100 transition-colors uppercase font-bold text-sm">
-            <td class="p-4 border-r-2 border-black font-black font-mono">{{ member.membershipNumber }}</td>
-            <td class="p-4 border-r-2 border-black">{{ member.fullName }}</td>
-            <td class="p-4 border-r-2 border-black text-xs">
-              <div>{{ member.email }}</div>
-              <div class="opacity-40">{{ member.phoneNumber }}</div>
+          <tr class="hover:bg-neutral-50/50 transition-colors text-sm">
+            <td class="p-4 font-bold font-mono text-xs">{{ member.membershipNumber }}</td>
+            <td class="p-4">{{ member.fullName }}</td>
+            <td class="p-4 text-xs">
+              <div class="font-medium">{{ member.email }}</div>
+              <div class="text-neutral-400 mt-0.5">{{ member.phoneNumber }}</div>
             </td>
-            <td class="p-4 flex gap-4">
-              <button class="text-[10px] font-black uppercase hover:underline">Update</button>
-              <button (click)="deleteMember(member.id)" class="text-[10px] font-black uppercase text-red-600 hover:underline">Terminate</button>
+            <td class="p-4">
+              <div class="flex gap-4">
+                <button (click)="editMember(member.id)" class="text-[10px] font-bold uppercase tracking-tight text-neutral-400 hover:text-black transition-colors">Edit</button>
+                <button (click)="deleteMember(member.id)" class="text-[10px] font-bold uppercase tracking-tight text-red-400 hover:text-red-600 transition-colors">Delete</button>
+              </div>
             </td>
           </tr>
         } @empty {
           @if (!loading()) {
             <tr>
-              <td colspan="4" class="p-12 text-center font-black uppercase opacity-40 italic">
-                No personnel records detected in database.
+              <td colspan="4" class="p-12 text-center text-sm text-neutral-400 italic">
+                No members found in the registry.
               </td>
             </tr>
           }

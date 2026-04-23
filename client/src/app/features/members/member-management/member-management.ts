@@ -31,6 +31,10 @@ export class MemberManagementComponent {
     });
   }
 
+  editMember(id: number) {
+    alert(`Editing functionality for member ID ${id} is not yet implemented.`);
+  }
+
   deleteMember(id: number) {
     if (confirm('Are you sure you want to delete this member?')) {
       this.memberService.deleteMember(id).subscribe({

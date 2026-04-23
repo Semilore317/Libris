@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class ButtonComponent {
   @Input() variant: 'primary' | 'secondary' | 'outline' = 'primary';
+  @Input() theme: 'brutal' | 'minimal' = 'minimal';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() type: 'button' | 'submit' = 'button';
   @Input() disabled: boolean = false;
 }

@@ -11,9 +11,13 @@ export interface Loan {
       author: string;
     }
   };
-  loanDate: string;
+  member: {
+    fullName: string;
+    membershipNumber: string;
+  };
+  borrowedAt: string;
   dueDate: string;
-  returnDate: string | null;
+  returnedAt: string | null;
   status: string;
 }
 
@@ -29,7 +33,15 @@ export class LoanService {
     return this.http.get<Loan[]>(`${this.baseUrl}/my-history`);
   }
 
-  checkoutBook(bookInstanceId: number, memberId?: number, dueDate?: string): Observable<Loan> {
-    return this.http.post<Loan>(`${this.baseUrl}/checkout`, { bookInstanceId, memberId, dueDate });
+  checkoutBook(bookId: number, memberId?: number, dueDate?: string): Observable<Loan> {
+    return this.http.post<Loan>(`${this.baseUrl}/checkout`, { bookId, memberId, dueDate });
+  }
+
+  getAllLoans(): Observable<Loan[]> {
+    return this.http.get<Loan[]>(this.baseUrl);
+  }
+
+  returnBook(loanId: number): Observable<Loan> {
+    return this.http.post<Loan>(`${this.baseUrl}/${loanId}/return`, {});
   }
 }

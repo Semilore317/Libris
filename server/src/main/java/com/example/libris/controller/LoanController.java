@@ -40,21 +40,30 @@ public class LoanController {
         Long targetMemberId;
 
         if (isLibrarian) {
-            // Librarian must provide memberId
             if (loanRequestDTO.getMemberId() == null) {
                 throw new IllegalArgumentException("Librarian must provide memberId");
             }
             targetMemberId = loanRequestDTO.getMemberId();
         } else {
-            // Member checkout for self
             Member member = memberRepository.findByUser(user)
                     .orElseThrow(() -> new ResourceNotFoundException(
                             "Member profile not found for user: " + principal.getName()));
             targetMemberId = member.getId();
         }
 
-        Loan loan = loanService.checkoutBook(loanRequestDTO.getBookInstanceId(), targetMemberId,
-                loanRequestDTO.getDueDate());
+        java.time.LocalDate dueDate = loanRequestDTO.getDueDate() != null 
+                ? loanRequestDTO.getDueDate() 
+                : java.time.LocalDate.now().plusDays(14);
+
+        Loan loan;
+        if (loanRequestDTO.getBookInstanceId() != null) {
+            loan = loanService.checkoutBook(loanRequestDTO.getBookInstanceId(), targetMemberId, dueDate);
+        } else if (loanRequestDTO.getBookId() != null) {
+            loan = loanService.checkoutBookByTitle(loanRequestDTO.getBookId(), targetMemberId, dueDate);
+        } else {
+            throw new IllegalArgumentException("Either bookInstanceId or bookId must be provided");
+        }
+        
         return ResponseEntity.ok(loan);
     }
 
@@ -62,5 +71,20 @@ public class LoanController {
     public ResponseEntity<List<Loan>> myHistory(Principal principal) {
         List<Loan> loans = loanService.findMyLoans(principal.getName());
         return ResponseEntity.ok(loans);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Loan>> getAllLoans() {
+        return ResponseEntity.ok(loanService.findAllLoans());
+    }
+
+    @GetMapping("/overdue")
+    public ResponseEntity<List<Loan>> getOverdueLoans() {
+        return ResponseEntity.ok(loanService.findOverdueLoans());
+    }
+
+    @PostMapping("/{id}/return")
+    public ResponseEntity<Loan> returnBook(@PathVariable Long id) {
+        return ResponseEntity.ok(loanService.returnBook(id));
     }
 }

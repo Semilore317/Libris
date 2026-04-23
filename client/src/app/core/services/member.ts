@@ -34,4 +34,8 @@ export class MemberService {
   deleteMember(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  getMemberByMembershipNumber(num: string): Observable<Member> {
+    return this.http.get<Member>(`${this.baseUrl}/lookup?membershipNumber=${num}`);
+  }
 }

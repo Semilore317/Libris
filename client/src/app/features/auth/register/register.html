@@ -3,13 +3,13 @@
   <div class="hidden lg:flex flex-1 bg-black text-white p-16 flex-col justify-between items-start select-none">
     <div class="w-16 h-16 bg-white"></div>
     <div>
-      <h1 class="text-[80px] font-black leading-[0.8] mb-8">JOIN<br>ARCHIVE</h1>
-      <p class="text-xl max-w-sm opacity-80 uppercase font-bold tracking-widest leading-relaxed">
-        Establish your identity within the repository.
+      <h1 class="text-[80px] font-black leading-[0.8] mb-8">CREATE<br>ACCOUNT</h1>
+      <p class="text-xl max-w-sm font-bold tracking-tight leading-relaxed">
+        Join the Libris community and manage your personal collection.
       </p>
     </div>
     <div class="text-xs border-t border-white pt-4 w-full opacity-40">
-      MEMBER_ONBOARDING // v1.0
+      LIBRIS // v1.0
     </div>
   </div>
 
@@ -21,70 +21,72 @@
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-1">
-            <label class="block text-[10px] font-black uppercase opacity-60">First Name</label>
+            <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">First Name</label>
             <input 
               type="text" 
               formControlName="firstName"
-              class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
-              placeholder="NAME_FIRST"
+              class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+              placeholder="First Name"
             >
           </div>
           <div class="space-y-1">
-            <label class="block text-[10px] font-black uppercase opacity-60">Last Name</label>
+            <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Last Name</label>
             <input 
               type="text" 
               formControlName="lastName"
-              class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
-              placeholder="NAME_LAST"
+              class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+              placeholder="Last Name"
             >
           </div>
         </div>
 
         <div class="space-y-1">
-          <label class="block text-[10px] font-black uppercase opacity-60">Email Protocol</label>
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Email Address</label>
           <input 
             type="email" 
             formControlName="email"
-            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
-            placeholder="OPERATOR@SYSTEM.NET"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="your@email.com"
           >
         </div>
 
         <div class="space-y-1">
-          <label class="block text-[10px] font-black uppercase opacity-60">Username Identity</label>
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Username</label>
           <input 
             type="text" 
             formControlName="username"
-            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
-            placeholder="USER_NAME"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="Choose a username"
           >
         </div>
 
         <div class="space-y-1">
-          <label class="block text-[10px] font-black uppercase opacity-60">Passphrase</label>
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Password</label>
           <input 
             type="password" 
             formControlName="password"
-            class="w-full brutal-border p-3 focus:bg-surface-100 outline-none font-bold uppercase text-sm"
-            placeholder="********"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="Create a password"
           >
         </div>
 
         <div *ngIf="error()" class="bg-black text-white p-4 font-bold text-xs uppercase brutal-shadow">
-          [CRITICAL ERROR]: {{ error() }}
+          Error: {{ error() }}
         </div>
 
         <app-button 
+          type="submit"
           variant="primary" 
+          theme="brutal"
           size="lg" 
           class="w-full block" 
           [disabled]="loading()"
         >
-          {{ loading() ? 'Establishing...' : 'Confirm Registration' }}
+          {{ loading() ? 'Registering...' : 'Create Account' }}
         </app-button>
 
         <div class="pt-6 border-t-2 border-black text-center">
-          <a routerLink="/login" class="text-xs font-black uppercase hover:underline">Existing Operator? Sign In</a>
+          <a routerLink="/login" class="text-xs font-black uppercase hover:underline">Already have an account? Log In</a>
         </div>
       </form>
     </div>
