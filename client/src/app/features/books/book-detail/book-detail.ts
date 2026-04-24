@@ -101,10 +101,6 @@ export class BookDetailComponent {
     if (!book || !member) return;
 
     this.checkoutLoading.set(true);
-    // Fixed: Passing null as bookInstanceId for now as we don't have instance selection yet, 
-    // but the backend needs a specific instance. For now, let's assume we pick the first available.
-    // Actually, we need an instance ID.
-    
     this.loanService.checkoutBook(book.id, member.id).subscribe({
       next: () => {
         this.toastService.success('Checkout successful!');
@@ -127,11 +123,12 @@ export class BookDetailComponent {
     this.loading.set(true);
     this.bookService.addInstances(b.id, this.copyCount()).subscribe({
       next: () => {
+        this.toastService.success(`${this.copyCount()} ${this.copyCount() === 1 ? 'copy' : 'copies'} added successfully.`);
         this.loadBook();
         this.copyCount.set(1);
       },
       error: (err) => {
-        console.error('Error adding copies:', err);
+        this.toastService.error(err.error?.message || 'Failed to add copies.');
         this.loading.set(false);
       }
     });

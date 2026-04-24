@@ -1,0 +1,74 @@
+<div class="space-y-12">
+  <div class="border-b border-neutral-100 pb-8">
+    <h2 class="text-4xl font-bold tracking-tight">My Reservations</h2>
+    <p class="text-sm text-neutral-500 mt-2">Books you've placed holds on. You'll be notified when they become available.</p>
+  </div>
+
+  <!-- Cancel Confirmation Banner -->
+  @if (confirmCancelId() !== null) {
+    <div class="flex items-center justify-between p-4 bg-black text-white text-sm animate-in fade-in">
+      <span>Cancel reservation <span class="font-bold">#{{ confirmCancelId() }}</span>?</span>
+      <div class="flex gap-4">
+        <button (click)="dismissCancel()" class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Keep It</button>
+        <button (click)="confirmCancel()" class="text-[10px] font-bold uppercase tracking-widest bg-white text-black px-3 py-1 hover:bg-neutral-200 transition-colors">Cancel Hold</button>
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  } @else if (reservations().length === 0) {
+    <div class="p-20 minimal-border border-dashed flex flex-col items-center justify-center gap-4 text-center">
+      <span class="text-5xl text-neutral-200">&#128203;</span>
+      <p class="text-neutral-400">You don't have any active reservations.</p>
+      <p class="text-sm text-neutral-300">Browse the catalog and reserve books that are currently on loan.</p>
+    </div>
+  } @else {
+    <div class="minimal-border bg-white overflow-hidden shadow-sm">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-neutral-50 text-neutral-400 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+            <th class="p-4">Book</th>
+            <th class="p-4">Reserved On</th>
+            <th class="p-4">Status</th>
+            <th class="p-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-50">
+          @for (res of reservations(); track res.id) {
+            <tr class="text-sm hover:bg-neutral-50/50 transition-colors">
+              <td class="p-4">
+                <div class="font-bold">{{ res.book.title }}</div>
+                <div class="text-xs text-neutral-400">{{ res.book.author }}</div>
+              </td>
+              <td class="p-4 text-sm text-neutral-600">
+                {{ res.reservationDate | date:'mediumDate' }}
+              </td>
+              <td class="p-4">
+                <span
+                  class="text-[10px] font-bold uppercase tracking-wider px-2 py-1"
+                  [ngClass]="{
+                    'bg-neutral-100 text-neutral-500': res.status === 'PENDING',
+                    'bg-black text-white': res.status === 'READY',
+                    'text-neutral-300': res.status === 'CANCELLED'
+                  }"
+                >
+                  {{ res.status }}
+                </span>
+              </td>
+              <td class="p-4 text-right">
+                @if (res.status === 'PENDING' || res.status === 'READY') {
+                  <app-button (click)="promptCancel(res.id)" variant="secondary" size="sm">
+                    Cancel Hold
+                  </app-button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

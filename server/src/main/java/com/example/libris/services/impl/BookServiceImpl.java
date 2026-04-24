@@ -66,7 +66,28 @@ public class BookServiceImpl implements BookService {
   public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
     Book book = bookMapper.bookRequestDTOToBook(bookRequestDTO);
     Book savedBook = bookRepository.save(book);
-    return bookMapper.bookToBookResponseDTO(savedBook);
+    return mapToResponse(savedBook);
+  }
+
+  @Override
+  public BookResponseDTO updateBook(Long id, BookRequestDTO bookRequestDTO) {
+    Book book = bookRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+    book.setTitle(bookRequestDTO.getTitle());
+    book.setAuthor(bookRequestDTO.getAuthor());
+    book.setGenre(bookRequestDTO.getGenre());
+    book.setPublicationYear(bookRequestDTO.getPublicationYear());
+    if (bookRequestDTO.getCoverImageUrl() != null) {
+      book.setCoverImageUrl(bookRequestDTO.getCoverImageUrl());
+    }
+    return mapToResponse(bookRepository.save(book));
+  }
+
+  @Override
+  public void deleteBook(Long id) {
+    Book book = bookRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + id));
+    bookRepository.delete(book);
   }
 
   @Override

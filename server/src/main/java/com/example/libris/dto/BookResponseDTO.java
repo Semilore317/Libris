@@ -15,6 +15,7 @@ public class BookResponseDTO {
 
     private Long totalCount;
     private Long availableCount;
+    private String coverImageUrl;
     
     // Alias for frontend compatibility if needed, but we'll stick to one
     public String getCategory() {

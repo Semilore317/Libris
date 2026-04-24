@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <!-- Add Book Form (Slide-over / Modal style) -->
+  <!-- Add Book Form -->
   @if (showAddForm()) {
     <div class="minimal-border bg-neutral-50 p-8 mb-12 animate-in fade-in slide-in-from-top duration-300">
       <div class="flex justify-between items-center mb-8">
@@ -36,24 +36,33 @@
         <button (click)="toggleAddForm()" class="text-sm font-bold uppercase tracking-widest opacity-30 hover:opacity-100 transition-opacity">Close</button>
       </div>
 
-      <form [formGroup]="addBookForm" (ngSubmit)="onAddBook()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <form [formGroup]="addBookForm" (ngSubmit)="onAddBook()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Title</label>
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Title *</label>
           <input formControlName="title" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
         </div>
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Author</label>
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Author *</label>
           <input formControlName="author" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
         </div>
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">ISBN</label>
-          <input formControlName="isbn" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">ISBN *</label>
+          <input formControlName="ISBN" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
         </div>
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Category</label>
-          <input formControlName="category" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Genre *</label>
+          <select formControlName="genre" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+            <option value="">Select a genre</option>
+            @for (g of genres; track g) {
+              <option [value]="g">{{ g.replace('_', ' ') }}</option>
+            }
+          </select>
         </div>
-        <div class="lg:col-span-4 flex justify-end gap-4 mt-4">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Publication Year</label>
+          <input formControlName="publicationYear" type="number" placeholder="e.g. 2024" min="1000" max="2099" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="lg:col-span-3 flex justify-end gap-4 mt-4">
           <app-button type="button" variant="secondary" (click)="toggleAddForm()">Cancel</app-button>
           <app-button type="submit" [disabled]="addBookForm.invalid || loading()">
             {{ loading() ? 'Saving...' : 'Register Book' }}
@@ -65,8 +74,20 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
     @for (book of books(); track book.id) {
-      <div class="minimal-card flex flex-col group h-full !p-6">
-        <div class="flex-1 space-y-4">
+      <div class="minimal-card flex flex-col group h-full !p-0 overflow-hidden">
+        <!-- Cover Image -->
+        <div class="aspect-[3/2] w-full bg-neutral-100 overflow-hidden flex-shrink-0">
+          @if (book.coverImageUrl) {
+            <img [src]="book.coverImageUrl" [alt]="book.title + ' cover'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          } @else {
+            <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-neutral-200">
+              <span class="text-4xl">&#128218;</span>
+              <span class="text-[10px] font-bold uppercase tracking-widest">No Cover</span>
+            </div>
+          }
+        </div>
+
+        <div class="flex-1 flex flex-col p-6 space-y-4">
           <div class="flex justify-between items-start gap-4">
             <span class="text-[10px] border border-neutral-100 px-2 py-1 font-bold text-neutral-400 uppercase tracking-tight">
               {{ book.category }}
@@ -89,22 +110,22 @@
             <p class="text-xs text-neutral-400 mt-1">{{ book.author }}</p>
           </div>
 
-          <div class="pt-4 border-t border-neutral-50 flex justify-between items-end">
+          <div class="pt-4 border-t border-neutral-50 flex justify-between items-end mt-auto">
             <div class="flex flex-col">
               <span class="text-[8px] font-bold text-neutral-300 uppercase tracking-widest">Inventory</span>
               <span class="text-xs font-bold">{{ book.availableCount }} / {{ book.totalCount }}</span>
             </div>
             <span class="text-[10px] font-medium text-neutral-300">{{ book.isbn }}</span>
           </div>
-        </div>
 
-        <app-button 
-          variant="secondary" 
-          class="w-full mt-6"
-          [routerLink]="['/books', book.id]"
-        >
-          View Details
-        </app-button>
+          <app-button 
+            variant="secondary" 
+            class="w-full"
+            [routerLink]="['/books', book.id]"
+          >
+            View Details
+          </app-button>
+        </div>
       </div>
     } @empty {
       @if (!loading()) {

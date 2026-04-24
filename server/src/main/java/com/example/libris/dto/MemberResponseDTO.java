@@ -13,4 +13,6 @@ public class MemberResponseDTO {
     private String middleName;
     private String lastName;
     private String email;
+    private String phoneNumber;
+    private String fullName;
 }

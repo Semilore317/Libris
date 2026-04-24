@@ -9,8 +9,11 @@ export interface Book {
   author: string;
   isbn: string;
   category: string;
+  genre: string;
+  publicationYear?: number;
   availableCount: number;
   totalCount: number;
+  coverImageUrl?: string;
 }
 
 @Injectable({
@@ -35,6 +38,14 @@ export class BookService {
 
   createBook(book: Partial<Book>): Observable<Book> {
     return this.http.post<Book>(this.baseUrl, book);
+  }
+
+  updateBook(id: number, book: Partial<Book>): Observable<Book> {
+    return this.http.put<Book>(`${this.baseUrl}/${id}`, book);
+  }
+
+  deleteBook(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
   addInstances(bookId: number, quantity: number): Observable<any> {

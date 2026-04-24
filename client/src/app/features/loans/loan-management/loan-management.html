@@ -4,6 +4,36 @@
     <p class="text-sm text-neutral-500">Oversee all active, overdue, and completed loans across the system.</p>
   </div>
 
+  <!-- Filter Tabs -->
+  <div class="flex gap-1 border-b border-neutral-100">
+    @for (f of filters; track f) {
+      <button
+        (click)="setFilter(f)"
+        class="px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-colors border-b-2 -mb-px"
+        [class.border-black]="activeFilter() === f"
+        [class.text-black]="activeFilter() === f"
+        [class.border-transparent]="activeFilter() !== f"
+        [class.text-neutral-400]="activeFilter() !== f"
+      >
+        {{ f }}
+      </button>
+    }
+    <span class="ml-auto text-[10px] text-neutral-300 self-center pr-2">
+      {{ filteredLoans().length }} record{{ filteredLoans().length !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- Inline Return Confirmation Banner -->
+  @if (confirmReturnId() !== null) {
+    <div class="flex items-center justify-between p-4 bg-black text-white text-sm animate-in fade-in">
+      <span>Confirm return for loan <span class="font-bold">#{{ confirmReturnId() }}</span>?</span>
+      <div class="flex gap-4">
+        <button (click)="cancelReturn()" class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Cancel</button>
+        <button (click)="confirmReturn()" class="text-[10px] font-bold uppercase tracking-widest bg-white text-black px-3 py-1 hover:bg-neutral-200 transition-colors">Confirm</button>
+      </div>
+    </div>
+  }
+
   <div class="minimal-border bg-white overflow-hidden shadow-sm">
     <table class="w-full text-left border-collapse">
       <thead>
@@ -15,11 +45,11 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-neutral-50">
-        @for (loan of loans(); track loan.id) {
-          <tr class="text-sm">
+        @for (loan of filteredLoans(); track loan.id) {
+          <tr class="text-sm" [class.opacity-50]="loan.status === 'RETURNED'">
             <td class="p-4">
               <div class="font-bold">{{ loan.bookInstance.book.title }}</div>
-              <div class="text-[10px] text-neutral-400">ID: {{ loan.id }}</div>
+              <div class="text-[10px] text-neutral-400">Loan #{{ loan.id }}</div>
             </td>
             <td class="p-4">
               <span class="font-medium">{{ loan.member.fullName }}</span>
@@ -29,11 +59,18 @@
               <div [ngClass]="{'text-red-500 font-bold': loan.status === 'OVERDUE'}">
                 {{ loan.dueDate | date:'mediumDate' }}
               </div>
-              <div class="text-[10px] uppercase font-bold text-neutral-300">{{ loan.status }}</div>
+              <div class="text-[10px] uppercase font-bold"
+                [ngClass]="{
+                  'text-black': loan.status === 'ACTIVE',
+                  'text-red-400': loan.status === 'OVERDUE',
+                  'text-neutral-300': loan.status === 'RETURNED'
+                }">
+                {{ loan.status }}
+              </div>
             </td>
             <td class="p-4 text-right">
-              @if (!loan.returnedAt) {
-                <app-button (click)="onReturn(loan.id)" variant="secondary" size="sm">
+              @if (loan.status !== 'RETURNED') {
+                <app-button (click)="promptReturn(loan.id)" variant="secondary" size="sm">
                   Process Return
                 </app-button>
               } @else {
@@ -47,7 +84,7 @@
               @if (loading()) {
                 <div class="animate-pulse">Loading circulation data...</div>
               } @else {
-                No active loans found in the system.
+                No loans found for this filter.
               }
             </td>
           </tr>

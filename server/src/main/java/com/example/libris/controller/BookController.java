@@ -3,10 +3,10 @@ package com.example.libris.controller;
 import com.example.libris.dto.AddBookInstanceRequestDTO;
 import com.example.libris.dto.BookRequestDTO;
 import com.example.libris.dto.BookResponseDTO;
-import com.example.libris.entity.Book;
 import com.example.libris.entity.BookInstance;
 import com.example.libris.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +37,18 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookRequestDTO bookRequestDTO) {
         BookResponseDTO book = bookService.createBook(bookRequestDTO);
-        return new ResponseEntity<>(book, org.springframework.http.HttpStatus.CREATED);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @RequestBody BookRequestDTO bookRequestDTO) {
+        return ResponseEntity.ok(bookService.updateBook(id, bookRequestDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/instances")

@@ -46,6 +46,9 @@ public class Member {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = true)
+    private String phoneNumber;
+
     // history
 
     @com.fasterxml.jackson.annotation.JsonIgnore

@@ -1,39 +1,114 @@
-<div class="space-y-12">
+<div class="space-y-8">
   <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-neutral-100 pb-8">
     <div>
       <h2 class="text-4xl font-bold tracking-tight">Member Registry</h2>
       <p class="text-sm text-neutral-500 mt-2">Manage library members and their access status.</p>
     </div>
-    
-    <app-button variant="primary" size="lg">Add New Member</app-button>
+    <app-button variant="primary" size="lg" (click)="toggleAddForm()">
+      {{ showAddForm() ? 'Cancel' : 'Add New Member' }}
+    </app-button>
   </div>
+
+  <!-- Add Member Form -->
+  @if (showAddForm()) {
+    <div class="minimal-border bg-neutral-50 p-8 animate-in fade-in slide-in-from-top duration-300">
+      <h3 class="text-lg font-bold mb-6">Register New Member</h3>
+      <form [formGroup]="addMemberForm" (ngSubmit)="onAddMember()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">First Name *</label>
+          <input formControlName="firstName" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Last Name *</label>
+          <input formControlName="lastName" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Email *</label>
+          <input formControlName="email" type="email" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Phone</label>
+          <input formControlName="phoneNumber" type="tel" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Username *</label>
+          <input formControlName="username" type="text" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Password *</label>
+          <input formControlName="password" type="password" class="w-full minimal-border p-3 bg-white text-sm outline-none">
+        </div>
+        <div class="lg:col-span-3 flex justify-end gap-4">
+          <app-button type="button" variant="secondary" (click)="toggleAddForm()">Cancel</app-button>
+          <app-button type="submit" [disabled]="addMemberForm.invalid">Register Member</app-button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Delete Confirmation Banner -->
+  @if (confirmDeleteId() !== null) {
+    <div class="flex items-center justify-between p-4 bg-black text-white text-sm animate-in fade-in">
+      <span>Permanently remove member <span class="font-bold">#{{ confirmDeleteId() }}</span>?</span>
+      <div class="flex gap-4">
+        <button (click)="cancelDelete()" class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Cancel</button>
+        <button (click)="confirmDelete()" class="text-[10px] font-bold uppercase tracking-widest bg-red-500 text-white px-3 py-1 hover:bg-red-600 transition-colors">Delete</button>
+      </div>
+    </div>
+  }
 
   <div class="minimal-border bg-white overflow-hidden shadow-sm">
     <table class="w-full text-left border-collapse">
       <thead>
         <tr class="bg-neutral-50 text-neutral-400 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
-            <th class="p-4">Member ID</th>
-            <th class="p-4">Full Name</th>
-            <th class="p-4">Contact Details</th>
-            <th class="p-4">Actions</th>
+          <th class="p-4">Member ID</th>
+          <th class="p-4">Full Name</th>
+          <th class="p-4">Contact Details</th>
+          <th class="p-4">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-neutral-50">
         @for (member of members(); track member.id) {
-          <tr class="hover:bg-neutral-50/50 transition-colors text-sm">
-            <td class="p-4 font-bold font-mono text-xs">{{ member.membershipNumber }}</td>
-            <td class="p-4">{{ member.fullName }}</td>
-            <td class="p-4 text-xs">
-              <div class="font-medium">{{ member.email }}</div>
-              <div class="text-neutral-400 mt-0.5">{{ member.phoneNumber }}</div>
-            </td>
-            <td class="p-4">
-              <div class="flex gap-4">
-                <button (click)="editMember(member.id)" class="text-[10px] font-bold uppercase tracking-tight text-neutral-400 hover:text-black transition-colors">Edit</button>
-                <button (click)="deleteMember(member.id)" class="text-[10px] font-bold uppercase tracking-tight text-red-400 hover:text-red-600 transition-colors">Delete</button>
-              </div>
-            </td>
-          </tr>
+          @if (editingMemberId() === member.id) {
+            <!-- Inline Edit Row -->
+            <tr [formGroup]="editMemberForm" class="bg-neutral-50 text-sm">
+              <td class="p-4 font-bold font-mono text-xs text-neutral-400">{{ member.membershipNumber }}</td>
+              <td class="p-4">
+                <div class="flex gap-2">
+                  <input formControlName="firstName" type="text" placeholder="First" class="w-24 minimal-border p-1.5 text-xs outline-none bg-white">
+                  <input formControlName="lastName" type="text" placeholder="Last" class="w-24 minimal-border p-1.5 text-xs outline-none bg-white">
+                </div>
+              </td>
+              <td class="p-4">
+                <div class="flex flex-col gap-2">
+                  <input formControlName="email" type="email" class="minimal-border p-1.5 text-xs outline-none bg-white w-full">
+                  <input formControlName="phoneNumber" type="tel" placeholder="Phone" class="minimal-border p-1.5 text-xs outline-none bg-white w-full">
+                </div>
+              </td>
+              <td class="p-4">
+                <div class="flex gap-3">
+                  <button (click)="saveEdit()" class="text-[10px] font-bold uppercase tracking-tight text-black hover:underline transition-colors">Save</button>
+                  <button (click)="cancelEdit()" class="text-[10px] font-bold uppercase tracking-tight text-neutral-400 hover:text-black transition-colors">Cancel</button>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            <!-- Normal Row -->
+            <tr class="hover:bg-neutral-50/50 transition-colors text-sm">
+              <td class="p-4 font-bold font-mono text-xs">{{ member.membershipNumber }}</td>
+              <td class="p-4">{{ member.fullName }}</td>
+              <td class="p-4 text-xs">
+                <div class="font-medium">{{ member.email }}</div>
+                <div class="text-neutral-400 mt-0.5">{{ member.phoneNumber || '—' }}</div>
+              </td>
+              <td class="p-4">
+                <div class="flex gap-4">
+                  <button (click)="startEdit(member)" class="text-[10px] font-bold uppercase tracking-tight text-neutral-400 hover:text-black transition-colors">Edit</button>
+                  <button (click)="promptDelete(member.id)" class="text-[10px] font-bold uppercase tracking-tight text-red-400 hover:text-red-600 transition-colors">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
         } @empty {
           @if (!loading()) {
             <tr>

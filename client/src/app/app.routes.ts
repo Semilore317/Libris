@@ -42,6 +42,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/loans/loan-management/loan-management').then(m => m.LoanManagementComponent),
         canActivate: [authGuard],
         data: { role: 'ROLE_LIBRARIAN' }
+      },
+      {
+        path: 'reservations',
+        loadComponent: () => import('./features/reservations/my-reservations/my-reservations').then(m => m.MyReservationsComponent)
       }
     ]
   },

@@ -1,6 +1,7 @@
 package com.example.libris.entity;
 
 import com.example.libris.enums.BookEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class BookInstance {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "book_id")
+    @JsonIgnoreProperties("instances")
     private Book book;
 
     @Enumerated(EnumType.STRING)

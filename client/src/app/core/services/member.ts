@@ -6,8 +6,10 @@ import { Observable } from 'rxjs';
 export interface Member {
   id: number;
   fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   membershipNumber: string;
 }
 
@@ -27,8 +29,12 @@ export class MemberService {
     return this.http.get<Member>(`${this.baseUrl}/${id}`);
   }
 
-  addMember(member: Partial<Member>): Observable<Member> {
+  addMember(member: Partial<Member> & { username: string; password: string }): Observable<Member> {
     return this.http.post<Member>(this.baseUrl, member);
+  }
+
+  updateMember(id: number, member: Partial<Member>): Observable<Member> {
+    return this.http.put<Member>(`${this.baseUrl}/${id}`, member);
   }
 
   deleteMember(id: number): Observable<void> {

@@ -4,7 +4,15 @@ import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { BookService, Book } from '../../../core/services/book';
 import { AuthService } from '../../../core/services/auth';
+import { ToastService } from '../../../core/services/toast';
 import { ButtonComponent } from '../../../shared/components/button/button';
+
+export const BOOK_GENRES = [
+  'FICTION', 'NON_FICTION', 'SCIENCE_FICTION', 'FANTASY', 'MYSTERY',
+  'THRILLER', 'ROMANCE', 'HORROR', 'ADVENTURE', 'BIOGRAPHY', 'HISTORY',
+  'POETRY', 'DRAMA', 'COMEDY', 'CLASSIC', 'SELF_HELP', 'PHILOSOPHY',
+  'RELIGION', 'SCIENCE', 'TECHNOLOGY', 'OTHER'
+];
 
 @Component({
   selector: 'app-book-catalog',
@@ -16,8 +24,11 @@ import { ButtonComponent } from '../../../shared/components/button/button';
 export class BookCatalogComponent {
   private bookService = inject(BookService);
   private authService = inject(AuthService);
+  private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
-  
+
+  readonly genres = BOOK_GENRES;
+
   books = signal<Book[]>([]);
   loading = signal(false);
   showAddForm = signal(false);
@@ -26,8 +37,9 @@ export class BookCatalogComponent {
   addBookForm = this.fb.group({
     title: ['', [Validators.required]],
     author: ['', [Validators.required]],
-    isbn: ['', [Validators.required]],
-    category: ['', [Validators.required]],
+    ISBN: ['', [Validators.required]],
+    genre: ['', [Validators.required]],
+    publicationYear: [null as number | null],
   });
 
   constructor() {
@@ -46,12 +58,11 @@ export class BookCatalogComponent {
   }
 
   onSearch(event: Event) {
-    const query = (event.target as HTMLInputElement).value;
+    const query = (event.target as HTMLInputElement).value.trim();
     if (!query) {
       this.loadBooks();
       return;
     }
-
     this.loading.set(true);
     this.bookService.searchBooks(query).subscribe({
       next: (data) => {
@@ -64,24 +75,24 @@ export class BookCatalogComponent {
 
   toggleAddForm() {
     this.showAddForm.update(v => !v);
+    if (!this.showAddForm()) this.addBookForm.reset();
   }
 
   onAddBook() {
-    if (this.addBookForm.valid) {
-      this.loading.set(true);
-      const newBook = this.addBookForm.value as Partial<Book>;
-      
-      this.bookService.createBook(newBook).subscribe({
-        next: () => {
-          this.loadBooks();
-          this.addBookForm.reset();
-          this.showAddForm.set(false);
-        },
-        error: (err) => {
-          console.error('Error adding book:', err);
-          this.loading.set(false);
-        }
-      });
-    }
+    if (this.addBookForm.invalid) return;
+    this.loading.set(true);
+    this.bookService.createBook(this.addBookForm.value as Partial<Book>).subscribe({
+      next: () => {
+        this.toastService.success('Book registered successfully.');
+        this.loadBooks();
+        this.addBookForm.reset();
+        this.showAddForm.set(false);
+      },
+      error: (err) => {
+        this.toastService.error(err.error?.message || 'Failed to register book.');
+        this.loading.set(false);
+      }
+    });
   }
 }
+

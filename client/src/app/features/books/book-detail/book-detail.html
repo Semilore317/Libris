@@ -5,13 +5,26 @@
     @if (book(); as b) {
       <div class="flex flex-col lg:flex-row gap-12">
         <div class="flex-1 space-y-12">
-          <!-- Main Info -->
-          <div>
-            <span class="text-[10px] font-bold text-neutral-300 uppercase tracking-widest mb-4 inline-block">
-              {{ b.category }}
-            </span>
-            <h2 class="text-5xl font-bold tracking-tight leading-[1.1]">{{ b.title }}</h2>
-            <p class="text-xl text-neutral-400 mt-4 font-medium">{{ b.author }}</p>
+          <!-- Cover + Main Info -->
+          <div class="flex gap-8 items-start">
+            <!-- Cover Image -->
+            <div class="w-36 flex-shrink-0 hidden sm:block">
+              @if (b.coverImageUrl) {
+                <img [src]="b.coverImageUrl" [alt]="b.title + ' cover'" class="w-full shadow-md border border-neutral-100">
+              } @else {
+                <div class="w-full aspect-[2/3] bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-300 border border-neutral-100">
+                  <span class="text-3xl">&#128218;</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest">No Cover</span>
+                </div>
+              }
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-neutral-300 uppercase tracking-widest mb-4 inline-block">
+                {{ b.category }}
+              </span>
+              <h2 class="text-5xl font-bold tracking-tight leading-[1.1]">{{ b.title }}</h2>
+              <p class="text-xl text-neutral-400 mt-4 font-medium">{{ b.author }}</p>
+            </div>
           </div>
 
           <!-- Description / Meta -->
