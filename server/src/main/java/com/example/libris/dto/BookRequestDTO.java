@@ -13,4 +13,5 @@ public class BookRequestDTO {
     private String author;
     private BookGenre genre;
     private Year publicationYear;
+    private String coverImageUrl;
 }

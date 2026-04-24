@@ -22,6 +22,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -45,8 +46,12 @@ public class Member {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = true)
+    private String phoneNumber;
+
     // history
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Loan> loans;
 }

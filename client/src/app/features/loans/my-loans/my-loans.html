@@ -1,0 +1,57 @@
+<div class="space-y-12">
+  <div class="border-b border-neutral-100 pb-8">
+    <h2 class="text-4xl font-bold tracking-tight">My Borrowing History</h2>
+    <p class="text-sm text-neutral-500 mt-2">View and track your current loans and borrowing history.</p>
+  </div>
+
+  <div class="minimal-border bg-white overflow-hidden shadow-sm">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-neutral-50 text-neutral-400 uppercase text-[10px] font-bold tracking-widest border-b border-neutral-100">
+            <th class="p-4">Book</th>
+            <th class="p-4">Loan Date</th>
+            <th class="p-4">Due Date</th>
+            <th class="p-4">Status</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-neutral-50">
+        @for (loan of loans(); track loan.id) {
+          <tr class="hover:bg-neutral-50/50 transition-colors text-sm">
+            <td class="p-4">
+              <div class="font-bold">{{ loan.bookInstance.book.title }}</div>
+              <div class="text-[10px] text-neutral-400">{{ loan.bookInstance.book.author }}</div>
+            </td>
+            <td class="p-4 font-mono text-xs text-neutral-500">{{ loan.borrowedAt | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4 font-mono text-xs text-neutral-500">{{ loan.dueDate | date:'yyyy.MM.dd' }}</td>
+            <td class="p-4">
+              <span 
+                class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-tight border"
+                [ngClass]="{
+                  'border-black text-black': loan.status === 'ACTIVE',
+                  'bg-black text-white border-black': loan.status === 'OVERDUE',
+                  'text-neutral-300 border-neutral-100': loan.status === 'RETURNED'
+                }"
+              >
+                {{ loan.status }}
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          @if (!loading()) {
+            <tr>
+              <td colspan="4" class="p-12 text-center text-sm text-neutral-400 italic">
+                You have no active loans.
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  }
+</div>

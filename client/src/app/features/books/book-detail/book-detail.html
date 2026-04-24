@@ -1,0 +1,132 @@
+<div class="space-y-12">
+  <div class="flex flex-col gap-6">
+    <a routerLink="/books" class="text-xs font-semibold text-neutral-400 hover:text-black transition-colors uppercase tracking-tight">← Back to Catalog</a>
+    
+    @if (book(); as b) {
+      <div class="flex flex-col lg:flex-row gap-12">
+        <div class="flex-1 space-y-12">
+          <!-- Cover + Main Info -->
+          <div class="flex gap-8 items-start">
+            <!-- Cover Image -->
+            <div class="w-36 flex-shrink-0 hidden sm:block">
+              @if (b.coverImageUrl) {
+                <img [src]="b.coverImageUrl" [alt]="b.title + ' cover'" class="w-full shadow-md border border-neutral-100">
+              } @else {
+                <div class="w-full aspect-[2/3] bg-neutral-100 flex flex-col items-center justify-center gap-2 text-neutral-300 border border-neutral-100">
+                  <span class="text-3xl">&#128218;</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest">No Cover</span>
+                </div>
+              }
+            </div>
+            <div>
+              <span class="text-[10px] font-bold text-neutral-300 uppercase tracking-widest mb-4 inline-block">
+                {{ b.category }}
+              </span>
+              <h2 class="text-5xl font-bold tracking-tight leading-[1.1]">{{ b.title }}</h2>
+              <p class="text-xl text-neutral-400 mt-4 font-medium">{{ b.author }}</p>
+            </div>
+          </div>
+
+          <!-- Description / Meta -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="minimal-card !p-6">
+              <h4 class="font-bold text-sm mb-4 border-b border-neutral-50 pb-2">Book Details</h4>
+              <ul class="space-y-4 text-xs">
+                <li class="flex justify-between">
+                  <span class="text-neutral-400">ISBN</span>
+                  <span class="font-bold">{{ b.isbn }}</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-neutral-400">ID</span>
+                  <span class="font-bold">{{ b.id }}</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-neutral-400">Category</span>
+                  <span class="font-bold">{{ b.category }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="minimal-card bg-neutral-900 text-white !p-6">
+              <h4 class="font-bold text-sm mb-4 border-b border-neutral-800 pb-2">Availability</h4>
+              <div class="text-4xl font-bold">{{ b.availableCount }} / {{ b.totalCount }}</div>
+              <p class="text-[10px] text-neutral-400 mt-2">Copies currently available for checkout.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Action Side -->
+        <div class="w-full lg:w-96 flex flex-col gap-8">
+          <div class="minimal-card shadow-md !p-8 flex flex-col gap-6">
+            <h3 class="text-lg font-bold">Actions</h3>
+            
+            @if (isLibrarian()) {
+              <div class="space-y-4">
+                <div class="p-4 border border-black bg-neutral-50 space-y-4">
+                  <h4 class="text-[10px] font-bold uppercase tracking-wider">Member Checkout</h4>
+                  
+                  <div class="flex gap-2">
+                    <input 
+                      type="text" 
+                      [(ngModel)]="memberSearchQuery" 
+                      placeholder="Membership #"
+                      class="flex-1 minimal-border p-2 text-xs outline-none"
+                    >
+                    <app-button (click)="lookupMember()" variant="secondary" size="sm">Find</app-button>
+                  </div>
+
+                  @if (foundMember(); as m) {
+                    <div class="pt-4 border-t border-neutral-200 animate-in fade-in">
+                      <div class="text-xs font-bold">{{ m.fullName }}</div>
+                      <div class="text-[10px] text-neutral-400 mb-4">{{ m.membershipNumber }}</div>
+                      <app-button (click)="checkoutBook()" variant="primary" class="w-full" [disabled]="checkoutLoading()">
+                        {{ checkoutLoading() ? 'Processing...' : 'Complete Checkout' }}
+                      </app-button>
+                    </div>
+                  }
+                </div>
+                
+                <div class="pt-6 border-t border-neutral-100">
+                  <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 block">Register New Copies</label>
+                  <div class="flex gap-2">
+                    <input 
+                      type="number" 
+                      [(ngModel)]="copyCount" 
+                      min="1" 
+                      class="w-20 minimal-border p-2 bg-white text-sm outline-none"
+                    >
+                    <app-button (click)="addCopies()" variant="secondary" class="flex-1">
+                      Add Copies
+                    </app-button>
+                  </div>
+                </div>
+              </div>
+            } @else if (isMember()) {
+              @if (b.availableCount > 0) {
+                <app-button variant="primary" (click)="borrowBook()" class="w-full" [disabled]="checkoutLoading()">
+                  {{ checkoutLoading() ? 'Processing...' : 'Borrow Book' }}
+                </app-button>
+              } @else {
+                <app-button variant="secondary" (click)="reserveBook()" class="w-full">
+                  Reserve Book
+                </app-button>
+                <p class="text-[10px] text-neutral-400 mt-2 text-center italic">Get notified when a copy is returned.</p>
+              }
+            }
+          </div>
+
+          <div class="p-6 border border-dashed border-neutral-200">
+            <h4 class="font-bold text-xs uppercase mb-2">Notice</h4>
+            <p class="text-[10px] text-neutral-400"> All loans and returns are tracked in your library account history. </p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center p-20">
+      <div class="w-12 h-12 border-8 border-black border-t-white animate-spin"></div>
+    </div>
+  }
+</div>

@@ -1,0 +1,40 @@
+<div class="h-screen w-64 bg-white text-black p-8 flex flex-col gap-12 border-r border-neutral-100">
+  <div class="flex items-center gap-3">
+    <div class="w-6 h-6 bg-black"></div>
+    <h1 class="text-xl font-bold tracking-tight">Libris</h1>
+  </div>
+
+  <nav class="flex flex-col gap-1">
+    <a routerLink="/dashboard" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+      Dashboard
+    </a>
+
+    @if (isLibrarian()) {
+      <a routerLink="/books" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Inventory
+      </a>
+      <a routerLink="/members" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Members
+      </a>
+      <a routerLink="/loans/manage" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Manage Loans
+      </a>
+    } @else {
+      <a routerLink="/books" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        Catalog
+      </a>
+      <a routerLink="/loans" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        My Loans
+      </a>
+      <a routerLink="/reservations" routerLinkActive="bg-neutral-50 font-semibold" class="px-4 py-2 hover:bg-neutral-50 transition-all border-b border-transparent text-sm">
+        My Reservations
+      </a>
+    }
+  </nav>
+
+  <div class="mt-auto pt-8 border-t border-neutral-50">
+    <button (click)="logout()" class="w-full text-left px-4 py-2 text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
+      Sign Out
+    </button>
+  </div>
+</div>

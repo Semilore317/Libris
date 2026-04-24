@@ -1,0 +1,94 @@
+<div class="flex min-h-screen bg-white text-black font-mono">
+  <!-- Branding Side -->
+  <div class="hidden lg:flex flex-1 bg-black text-white p-16 flex-col justify-between items-start select-none">
+    <div class="w-16 h-16 bg-white"></div>
+    <div>
+      <h1 class="text-[80px] font-black leading-[0.8] mb-8">CREATE<br>ACCOUNT</h1>
+      <p class="text-xl max-w-sm font-bold tracking-tight leading-relaxed">
+        Join the Libris community and manage your personal collection.
+      </p>
+    </div>
+    <div class="text-xs border-t border-white pt-4 w-full opacity-40">
+      LIBRIS // v1.0
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="flex-1 flex items-center justify-center p-8 bg-surface-50">
+    <div class="w-full max-w-lg p-10 brutal-border brutal-shadow bg-white">
+      <h2 class="text-4xl font-black mb-10 border-b-4 border-black pb-4 uppercase tracking-tighter">New Account</h2>
+      
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">First Name</label>
+            <input 
+              type="text" 
+              formControlName="firstName"
+              class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+              placeholder="First Name"
+            >
+          </div>
+          <div class="space-y-1">
+            <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Last Name</label>
+            <input 
+              type="text" 
+              formControlName="lastName"
+              class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+              placeholder="Last Name"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Email Address</label>
+          <input 
+            type="email" 
+            formControlName="email"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="your@email.com"
+          >
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Username</label>
+          <input 
+            type="text" 
+            formControlName="username"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="Choose a username"
+          >
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[10px] font-bold uppercase text-neutral-400 tracking-wider">Password</label>
+          <input 
+            type="password" 
+            formControlName="password"
+            class="w-full brutal-border p-3 focus:bg-neutral-50 outline-none font-bold text-sm"
+            placeholder="Create a password"
+          >
+        </div>
+
+        <div *ngIf="error()" class="bg-black text-white p-4 font-bold text-xs uppercase brutal-shadow">
+          Error: {{ error() }}
+        </div>
+
+        <app-button 
+          type="submit"
+          variant="primary" 
+          theme="brutal"
+          size="lg" 
+          class="w-full block" 
+          [disabled]="loading()"
+        >
+          {{ loading() ? 'Registering...' : 'Create Account' }}
+        </app-button>
+
+        <div class="pt-6 border-t-2 border-black text-center">
+          <a routerLink="/login" class="text-xs font-black uppercase hover:underline">Already have an account? Log In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="flex min-h-screen bg-white text-black font-mono">
+  <!-- Branding Side -->
+  <div class="hidden lg:flex flex-1 bg-black text-white p-16 flex-col justify-between items-start select-none">
+    <div class="w-24 h-24 bg-white"></div>
+    <div>
+      <h1 class="text-[120px] font-black leading-[0.8] mb-8">LIB<br>RIS</h1>
+      <p class="text-xl max-w-md opacity-80 uppercase font-bold tracking-widest">
+        Integrated Library Management System.
+      </p>
+    </div>
+    <div class="text-sm border-t border-white pt-4 w-full opacity-50">
+      SYSTEM v1.0 // 2026
+    </div>
+  </div>
+
+  <!-- Form Side -->
+  <div class="flex-1 flex items-center justify-center p-8">
+    <div class="w-full max-w-md p-10 brutal-border brutal-shadow bg-white">
+      <h2 class="text-4xl font-black mb-8 border-b-4 border-black pb-4 uppercase">LOGIN</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-8">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-neutral-400">Username</label>
+          <input
+            type="text"
+            formControlName="username"
+            class="w-full brutal-border p-4 focus:bg-neutral-50 outline-none font-bold transition-colors"
+            placeholder="Enter your username"
+          >
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-neutral-400">Password</label>
+          <input
+            type="password"
+            formControlName="password"
+            class="w-full brutal-border p-4 focus:bg-neutral-50 outline-none font-bold transition-colors"
+            placeholder="Enter your password"
+          >
+        </div>
+
+        <div *ngIf="error()" class="bg-black text-white p-4 font-bold text-xs uppercase brutal-shadow">
+          Error: {{ error() }}
+        </div>
+
+        <app-button
+          type="submit"
+          variant="primary"
+          theme="brutal"
+          size="lg"
+          class="w-full block"
+          [disabled]="loading()"
+        >
+          {{ loading() ? 'Authenticating...' : 'Log In' }}
+        </app-button>
+
+        <div class="pt-4 border-t-2 border-black flex justify-center">
+          <a routerLink="/register" class="text-xs font-black uppercase hover:underline opacity-60">Create New Account</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

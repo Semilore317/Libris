@@ -15,5 +15,11 @@ public enum BookGenre {
     POETRY,
     DRAMA,
     COMEDY,
+    CLASSIC,
+    SELF_HELP,
+    PHILOSOPHY,
+    RELIGION,
+    SCIENCE,
+    TECHNOLOGY,
     OTHER
 }

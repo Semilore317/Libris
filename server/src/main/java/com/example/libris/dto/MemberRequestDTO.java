@@ -19,6 +19,8 @@ public class MemberRequestDTO {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
+    private String phoneNumber;
+
     @NotBlank(message = "Username cannot be blank")
     private String username;
 

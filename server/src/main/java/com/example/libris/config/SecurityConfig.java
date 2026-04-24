@@ -72,44 +72,16 @@ public class SecurityConfig {
         .authorizeHttpRequests(authz -> authz
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
-            .requestMatchers("/api/v1/loans/checkout").hasAnyRole("LIBRARIAN", "MEMBER")
-            .requestMatchers("/api/v1/books/**").hasRole("LIBRARIAN")
-            .requestMatchers("/api/v1/members/**").hasRole("LIBRARIAN")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+            .requestMatchers("/api/v1/loans/**").hasAnyAuthority("ROLE_LIBRARIAN", "ROLE_MEMBER")
+            .requestMatchers("/api/v1/reservations/**").hasAnyAuthority("ROLE_LIBRARIAN", "ROLE_MEMBER")
+            .requestMatchers("/api/v1/books/**").hasAuthority("ROLE_LIBRARIAN")
+            .requestMatchers("/api/v1/members/**").hasAuthority("ROLE_LIBRARIAN")
+            .requestMatchers("/api/v1/reports/**").hasAuthority("ROLE_LIBRARIAN")
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-    //
-    //
-    //
-    //
-    //
     return http.build();
-    /// some other stuff
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
-    ///
   }
-  //
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
-  ///
 }
-
-/// a different thing
-///
-///
-///
-///

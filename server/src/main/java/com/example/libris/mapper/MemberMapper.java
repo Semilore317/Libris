@@ -21,6 +21,8 @@ public class MemberMapper {
         memberResponseDTO.setMiddleName(member.getMiddleName());
         memberResponseDTO.setLastName(member.getLastName());
         memberResponseDTO.setEmail(member.getEmail());
+        memberResponseDTO.setPhoneNumber(member.getPhoneNumber());
+        memberResponseDTO.setFullName(member.getFirstName() + " " + member.getLastName());
 
         return memberResponseDTO;
     }
@@ -51,6 +53,9 @@ public class MemberMapper {
         }
         if (memberRequestDTO.getEmail() != null) {
             member.setEmail(memberRequestDTO.getEmail());
+        }
+        if (memberRequestDTO.getPhoneNumber() != null) {
+            member.setPhoneNumber(memberRequestDTO.getPhoneNumber());
         }
     }
 }
